@@ -21,7 +21,7 @@ public class Busqueda {
 			return solucion(n);
 		}
 		
-		if(n.getProfundidad() < 10){
+		if(n.getProfundidad() < 3){
 			Estado temp =(Estado) n.getEstado().clone();
 			temp.arriba();
 			Nodo nodo = new Nodo(temp,"arriba",n);

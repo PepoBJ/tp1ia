@@ -29,8 +29,11 @@ public class Agente {
 
 		
 		LinkedList sol = Busqueda.buscar(clon);
-		
-		return (String)sol.getLast();
+		if (sol != null) {
+			return (String)sol.getLast();
+		} else {
+			return "izquierda";
+		}
 	}
 	
 	private void actualizarEstado2(){

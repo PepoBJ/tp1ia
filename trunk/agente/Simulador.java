@@ -19,7 +19,8 @@ public class Simulador {
 
 		this.agente = new Agente();
 		// Adivinamos inicialmente que 50 es la energia con la que empieza
-		int energia  = 50;
+		//int energia  = 50;
+		int energia = this.calculador.calcularEnergiaPacMan("");
 		int ciclo = 0;
 		while (ciclo < MAX_CICLOS) {
 			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
