@@ -1,11 +1,11 @@
 package agente;
 
-import ia.PairWrapper;
+import calculador.Pair;
 
 public class Estado {
 
 	
-	private PairWrapper posicion ;
+	private Pair posicion ;
 	
 	private int energiaActual;
 	private int energiaAnterior;
