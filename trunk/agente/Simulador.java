@@ -1,21 +1,21 @@
 package agente;
 
-import ia.CalculadorWrapper;
-import ia.PairWrapper;
-
 import java.util.Vector;
 
+import calculador.Calculador;
+import calculador.Pair;
+
 public class Simulador {
-	private CalculadorWrapper calculador;
+	private Calculador calculador;
 	private Agente agente;
 	
 	public Simulador() {
 		// TODO Auto-generated constructor stub
-		this.calculador = new CalculadorWrapper();
+		this.calculador = new Calculador();
 
 		Vector enemigos = this.calculador.inicializarEnemigo();
 		Vector comida   = this.calculador.inicializarComida();
-		PairWrapper posicion = this.calculador.getPosicionInicialWrapper();
+		Pair posicion = this.calculador.getPosicionInicial();
 
 		this.agente = new Agente();
 		// Adivinamos inicialmente que 50 es la energia con la que empieza
@@ -23,7 +23,7 @@ public class Simulador {
 		
 		while (true) {
 			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
-			
+			System.out.print(percepcion);
 			String accion = this.agente.accion(percepcion);
 			
 			energia = this.calculador.calcularEnergiaPacMan(accion);
@@ -35,7 +35,7 @@ public class Simulador {
 
 	 
 	
-	private PairWrapper calcularNuevaPosicion(PairWrapper posicion, String accion) {
+	private Pair calcularNuevaPosicion(Pair posicion, String accion) {
 		int x = posicion.x();
 		int y = posicion.y();
 		
@@ -50,7 +50,7 @@ public class Simulador {
 			x += 1;
 		}
 		
-		PairWrapper p = new PairWrapper(x,y);			
+		Pair p = new Pair(x,y);			
 		return p;
 	}
 

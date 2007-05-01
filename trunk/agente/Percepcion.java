@@ -1,19 +1,20 @@
 package agente;
 
-import ia.PairWrapper;
-
+import java.util.Iterator;
 import java.util.Vector;
+
+import calculador.Pair;
 
 public class Percepcion {
 
-	private PairWrapper posicionActual;
+	private Pair posicionActual;
 	private int energia; 
 	private int izq;
 	private int der;
 	private int abajo;
 	private int arriba;
 
-	public Percepcion(PairWrapper posicionActual, int energia, Vector comida, Vector enemigos) {
+	public Percepcion(Pair posicionActual, int energia, Vector comida, Vector enemigos) {
 		super();
 		this.posicionActual = posicionActual;
 		this.energia = energia;
@@ -26,14 +27,24 @@ public class Percepcion {
 	}
 
 	public int process(int x, int y, Vector comida, Vector enemigos) {
-		PairWrapper p = new PairWrapper(x,y);
-		if (comida.contains(p)) {			
-			return 1;
-		}
+		Pair p = new Pair(x,y);
 		
-		if (enemigos.contains(p)) {
-			return 2;
-		}
+		Iterator i = comida.iterator();		
+		while (i.hasNext()) {
+			Pair p2 = (Pair) i.next();
+			if (p2.x() == p.x() && p2.y() == p.y()) {
+				return 1;				
+			}
+		}		
+		
+		i = enemigos.iterator();		
+		while (i.hasNext()) {
+			Pair p2 = (Pair) i.next();
+			if (p2.x() == p.x() && p2.y() == p.y()) {
+				return 2;				
+			}
+		}				
+		
 		return 0;
 	}
 	
@@ -57,10 +68,16 @@ public class Percepcion {
 		return izq;
 	}
 
-	public PairWrapper getPosicionaActual() {
+	public Pair getPosicionaActual() {
 		return posicionActual;
 	}
 
-
+	public String toString() {
+		return new Integer(this.izq).toString() + " " +
+		new Integer(this.der).toString() + " " +
+		new Integer(this.arriba).toString() + " " +
+		new Integer(this.abajo).toString() ;
+	
+	}
 
 }
