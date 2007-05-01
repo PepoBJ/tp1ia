@@ -8,6 +8,8 @@ import calculador.Pair;
 public class Percepcion {
 
 	private Pair posicionActual;
+	
+	/*Valores en el ambiente en las distintas posiciones*/
 	private int energia; 
 	private int izq;
 	private int der;

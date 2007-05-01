@@ -1,5 +1,7 @@
 package agente;
 
+import java.awt.List;
+import java.util.LinkedList;
 import java.util.Vector;
 
 public class Busqueda {
@@ -8,13 +10,13 @@ public class Busqueda {
 		// TODO Auto-generated constructor stub
 	}
 	
-	static Vector buscar(Estado e){
+	static LinkedList buscar(Estado e){
 		Nodo nodo = new Nodo(e);
 		
 		return buscar2(nodo);
 	}
 	
-	private static Vector buscar2(Nodo n){
+	private static LinkedList buscar2(Nodo n){
 		if(objetivo(n.getEstado())){
 			return solucion(n);
 		}
@@ -23,7 +25,7 @@ public class Busqueda {
 			Estado temp =(Estado) n.getEstado().clone();
 			temp.arriba();
 			Nodo nodo = new Nodo(temp,"arriba",n);
-			Vector v = buscar2(nodo); 
+			LinkedList v = buscar2(nodo); 
 			if(v != null){
 				return v; 
 			}
@@ -78,8 +80,17 @@ public class Busqueda {
 		return e.todoConocido();
 	}
 	
-	private static Vector solucion(Nodo n){
-		return new Vector();
+	//COMPLETAR
+	private static LinkedList solucion(Nodo n){
+		LinkedList solucion = new LinkedList();
+		
+		while(n.getPadre() != null){
+			
+			solucion.add(solucion(n.getPadre()));
+		}
+		
+		return solucion(n);
+		
 		
 	}
 	
@@ -108,8 +119,7 @@ public class Busqueda {
 		}
 
 		public int getProfundidad() {
-			// TODO Auto-generated method stub
-			return 0;
+			return profundidad;
 		}		
 		
 		public String getAccion() {

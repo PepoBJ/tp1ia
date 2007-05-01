@@ -1,6 +1,6 @@
 package agente;
 
-import calculador.Pair;
+import java.util.LinkedList;
 
 public class Agente {
 	private Estado estado;
@@ -28,7 +28,9 @@ public class Agente {
 		clon = (Estado)estado.clone();
 
 	public String accion(Percepcion p) {
-		return (String)(Busqueda.buscar(clon)).elementAt(5555);
+		LinkedList sol = Busqueda.buscar(clon);
+		
+		return (String)sol.getLast();
 	}
 	
 	private void actualizarEstado2(){
