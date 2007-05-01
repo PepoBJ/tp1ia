@@ -27,7 +27,7 @@ public class Agente {
 		Estado clon;
 		clon = (Estado)estado.clone();
 
-	public String accion(Percepcion p) {
+		
 		LinkedList sol = Busqueda.buscar(clon);
 		
 		return (String)sol.getLast();
