@@ -18,13 +18,30 @@ public class MundoPercibido {
 		
 	}
 
+	public Object clone() {
+		MundoPercibido m = new MundoPercibido();
+		m.posiciones = (Vector) this.posiciones.clone();
+		return m;		
+	}
+	
 	public void actualizarCelda(int x, int y, int valor) {
-		if(x == 0) x = 4;
-		if(x == 5) x = 1;
+		if (x < 1) {
+			x = 4;
+		}
 		
-		if(y == 0) y = 4;
-		if(y == 5) y = 1;
+		if (x > 4) {
+			x = 1;
+		}
 		
+		if (y < 1){
+			y = 4;
+		}
+			
+		if (y > 4) {
+			y = 1;
+		}
+		x -= 1;
+		y -= 1;
 		((Vector)posiciones.elementAt(x)).setElementAt(new Integer(valor), y);
 		
 	}

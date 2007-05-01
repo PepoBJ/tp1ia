@@ -4,9 +4,6 @@ import calculador.Pair;
 
 public class Estado {
 
-
-	
-
 	private int energiaActual;
 	private int energiaAnterior;
 	private MundoPercibido mundoPercibido;
@@ -15,7 +12,8 @@ public class Estado {
 	
 	public Estado() {
 		mundoPercibido = new MundoPercibido();
-		experienciaEnergetica = new ExperienciaEnergetica();
+		experienciaEnergetica = new ExperienciaEnergetica();	
+		
 	}
 
 	public int getEnergiaActual() {
@@ -73,7 +71,13 @@ public class Estado {
 	}
 	
 	public Object clone(){
-		return new Estado();
+		Estado e = new Estado();
+		e.energiaActual = this.energiaActual;
+		e.energiaAnterior = this.energiaAnterior;
+		e.mundoPercibido = (MundoPercibido) this.mundoPercibido.clone();
+		e.experienciaEnergetica = (ExperienciaEnergetica) this.experienciaEnergetica.clone();
+		e.posicionActual = new Pair(this.posicionActual.x(),this.posicionActual.y());
+		return e;
 	}
 	
 	
@@ -113,7 +117,9 @@ public class Estado {
 
 	public void arriba() {
 		int temp = posicionActual.y() + 1;
-		if(temp == 5) temp = 1;
+		if (temp == 5) {
+			temp = 1;
+		}
 
 		posicionActual.setY(temp);
 		posicionesAdyacentes();
