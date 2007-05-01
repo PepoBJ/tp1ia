@@ -47,6 +47,8 @@ public class MundoPercibido {
 	}
 	
 	public int getCeldaAt(int x, int y){
+		x-=1;
+		y-=1;
 		Integer t = (Integer)((Vector)posiciones.elementAt(x)).elementAt(y);
 		return t.intValue();
 	}
