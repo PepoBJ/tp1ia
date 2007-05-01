@@ -29,10 +29,10 @@ public class Agente {
 
 		
 		LinkedList sol = Busqueda.buscar(clon);
-		if (sol != null) {
+		if (sol != null && ! sol.isEmpty()) {
 			return (String)sol.getLast();
 		} else {
-			return "izquierda";
+			return "comer";
 		}
 	}
 	

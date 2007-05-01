@@ -24,16 +24,19 @@ public class Simulador {
 		int ciclo = 0;
 		while (ciclo < MAX_CICLOS) {
 			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
-			System.out.print(ciclo+") "+percepcion+" ");
+			System.out.print(ciclo+") "+percepcion);
 			String accion = this.agente.accion(percepcion);
+			
+			System.out.print(" accion:"+accion);
 			if (accion == "terminar") {				
 				break;
-			}			
+			}
+
 			energia = this.calculador.calcularEnergiaPacMan(accion);
-			
+
 			posicion = this.calcularNuevaPosicion(posicion, accion);
 			
-			System.out.println("energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
+			System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
 			ciclo++;
 		}
 	}
