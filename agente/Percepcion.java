@@ -2,25 +2,41 @@ package agente;
 
 import ia.PairWrapper;
 
+import java.util.Vector;
+
 public class Percepcion {
 
-	private PairWrapper posicionaActual;
+	private PairWrapper posicionActual;
 	private int energia; 
 	private int izq;
 	private int der;
 	private int abajo;
 	private int arriba;
 
-	public Percepcion(PairWrapper posicionaActual, int energia, int izq, int der, int abajo, int arriba) {
+	public Percepcion(PairWrapper posicionActual, int energia, Vector comida, Vector enemigos) {
 		super();
-		this.posicionaActual = posicionaActual;
+		this.posicionActual = posicionActual;
 		this.energia = energia;
-		this.izq = izq;
-		this.der = der;
-		this.abajo = abajo;
-		this.arriba = arriba;
+		
+		
+		this.izq = this.process(posicionActual.x()-1, posicionActual.y(), comida, enemigos);
+		this.der = this.process(posicionActual.x()+1, posicionActual.y(), comida, enemigos);
+		this.abajo = this.process(posicionActual.x(), posicionActual.y()-1, comida, enemigos);
+		this.arriba = this.process(posicionActual.x(), posicionActual.y()+1, comida, enemigos);
 	}
 
+	public int process(int x, int y, Vector comida, Vector enemigos) {
+		PairWrapper p = new PairWrapper(x,y);
+		if (comida.contains(p)) {			
+			return 1;
+		}
+		
+		if (enemigos.contains(p)) {
+			return 2;
+		}
+		return 0;
+	}
+	
 	public int getAbajo() {
 		return abajo;
 	}
@@ -42,7 +58,7 @@ public class Percepcion {
 	}
 
 	public PairWrapper getPosicionaActual() {
-		return posicionaActual;
+		return posicionActual;
 	}
 
 
