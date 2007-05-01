@@ -21,7 +21,7 @@ public class Busqueda {
 			return solucion(n);
 		}
 		
-		if(n.getProfundidad() < 3){
+		if(n.getProfundidad() < 7){
 			Estado temp =(Estado) n.getEstado().clone();
 			temp.arriba();
 			Nodo nodo = new Nodo(temp,"arriba",n);
@@ -82,15 +82,13 @@ public class Busqueda {
 	
 	//COMPLETAR
 	private static LinkedList solucion(Nodo n){
-		LinkedList solucion = new LinkedList();
+		LinkedList s = new LinkedList();
 		
-		while(n.getPadre() != null){
-			
-			solucion.add(solucion(n.getPadre()));
-		}
-		
-		return solucion(n);
-		
+		while(! n.accion.equals("")){
+			s.add(n.accion);
+			n=n.getPadre();
+		}		
+		return s;		
 		
 	}
 	

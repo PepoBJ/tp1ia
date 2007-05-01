@@ -59,7 +59,6 @@ public class MundoPercibido {
 	
 	public static void main(String[] args) {
 		MundoPercibido a = new MundoPercibido();
-		System.out.print(a.getPosiciones());
 		
 	}
 
