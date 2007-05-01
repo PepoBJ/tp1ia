@@ -22,14 +22,14 @@ public class Simulador {
 		int energia  = 50;
 		
 		while (true) {
-			// TODO: 0,0,0,0 debería ser las celdas adjacentes basadas en 
-			// enemigos o comida...
-			Percepcion percepcion = new Percepcion(posicion,energia,0,0,0,0);
+			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
 			
-			String accion = this.agente.accion(percepcion)
+			String accion = this.agente.accion(percepcion);
 			
 			energia = this.calculador.calcularEnergiaPacMan(accion);
 			posicion = this.calcularNuevaPosicion(posicion, accion);
+			
+			break;
 		}
 	}
 
@@ -39,22 +39,17 @@ public class Simulador {
 		int x = posicion.x();
 		int y = posicion.y();
 		
-		switch (accion) {
-		case "arriba":
+		if (accion == "arriba") {			
 			y += 1; 
-			break;
-		case "abajo":
-			y -= 1; 
-			break;
-		case "izquierda":
-			x -= 1; 
-			break;
-		case "derecha":
-			x += 1; 
-			break;
-		default:
-			break;
+			
+		} else if (accion == "abajo") {
+			y -= 1;
+		} else if (accion == "izquierda" ) {
+			x -= 1;
+		} else if (accion == "derecha") {
+			x += 1;
 		}
+		
 		PairWrapper p = new PairWrapper(x,y);			
 		return p;
 	}
@@ -65,9 +60,7 @@ public class Simulador {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-
+		Simulador s = new Simulador();
 	}
 
 }
