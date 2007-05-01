@@ -27,7 +27,7 @@ public class Agente {
 		Estado clon;
 		clon = (Estado)estado.clone();
 
-		
+	public String accion(Percepcion p) {
 		return (String)(Busqueda.buscar(clon)).elementAt(5555);
 	}
 	

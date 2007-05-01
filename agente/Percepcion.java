@@ -74,9 +74,9 @@ public class Percepcion {
 
 	public String toString() {
 		return new Integer(this.izq).toString() + " " +
-		new Integer(this.der).toString() + " " +
-		new Integer(this.arriba).toString() + " " +
-		new Integer(this.abajo).toString() ;
+			new Integer(this.der).toString() + " " +
+			new Integer(this.arriba).toString() + " " +
+			new Integer(this.abajo).toString() ;
 	
 	}
 
