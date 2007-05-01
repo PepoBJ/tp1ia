@@ -6,8 +6,7 @@ public class Estado {
 
 
 	
-	private Pair posicion ;
-	
+
 	private int energiaActual;
 	private int energiaAnterior;
 	private MundoPercibido mundoPercibido;
@@ -66,8 +65,8 @@ public class Estado {
 		
 		int x = posicionActual.x();
 		int y = posicionActual.y();
-		mundoPercibido.actualizarCelda(x,y + 1,p.getAbajo());
-		mundoPercibido.actualizarCelda(x,y - 1,p.getArriba());
+		mundoPercibido.actualizarCelda(x,y - 1,p.getAbajo());
+		mundoPercibido.actualizarCelda(x,y + 1,p.getArriba());
 		mundoPercibido.actualizarCelda(x + 1,y,p.getDer());
 		mundoPercibido.actualizarCelda(x - 1,y,p.getIzq());
 
@@ -76,28 +75,74 @@ public class Estado {
 	public Object clone(){
 		return new Estado();
 	}
-
+	
+	
+	
 	public boolean todoConocido() {
-		return false;
+		for(int i = 1; i < 5; i++){
+			for(int j = 1; j < 5; j++){
+				if(mundoPercibido.getCeldaAt(i, j) == -1)
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	private void posicionesAdyacentes(){
+		int arribaY = posicionActual.y() + 1;
+		int arribaX = posicionActual.x();
+		if(arribaY == 5) arribaY = 1;
+		
+		int abajoY = posicionActual.y() - 1;
+		int abajoX = posicionActual.x();
+		if(abajoY == 0) abajoY = 4;
+		
+		int derechaX = posicionActual.x() + 1;
+		int derechaY = posicionActual.y();
+		if(derechaX == 5) derechaX = 1;
+		
+		int izquierdaX = posicionActual.x() - 1;
+		int izquierdaY = posicionActual.y();
+		if(izquierdaX == 0) izquierdaX = 4;
+		
+		mundoPercibido.actualizarCelda(arribaX, arribaY, 0);
+		mundoPercibido.actualizarCelda(abajoX, abajoY, 0);
+		mundoPercibido.actualizarCelda(derechaX, derechaY, 0);
+		mundoPercibido.actualizarCelda(izquierdaX, izquierdaY, 0);
 	}
 
 	public void arriba() {
-		// TODO Auto-generated method stub
-		
+		int temp = posicionActual.y() + 1;
+		if(temp == 5) temp = 1;
+
+		posicionActual.setY(temp);
+		posicionesAdyacentes();
 	}
 
 	public void abajo() {
-		// TODO Auto-generated method stub
-		
+		int temp = posicionActual.y() - 1;
+		if(temp == 0) temp = 4;
+
+		posicionActual.setY(temp);
+		posicionesAdyacentes();
 	}
 
 	public void derecha() {
-		// TODO Auto-generated method stub
-		
+		int temp = posicionActual.x() + 1;
+		if(temp == 5) temp = 1;
+
+		posicionActual.setX(temp);
+
+		posicionesAdyacentes();
 	}
 
 	public void izquierda() {
-		// TODO Auto-generated method stub
+		int temp = posicionActual.x() - 1;
+		if(temp == 0) temp = 4;
+
+		posicionActual.setX(temp);
+
+		posicionesAdyacentes();
 		
 	}
 
