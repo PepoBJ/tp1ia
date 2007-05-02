@@ -95,24 +95,23 @@ public class Estado {
 	private void posicionesAdyacentes(){
 		int arribaY = posicionActual.y() + 1;
 		int arribaX = posicionActual.x();
-		if(arribaY == 5) arribaY = 1;
 		
 		int abajoY = posicionActual.y() - 1;
 		int abajoX = posicionActual.x();
-		if(abajoY == 0) abajoY = 4;
 		
 		int derechaX = posicionActual.x() + 1;
 		int derechaY = posicionActual.y();
-		if(derechaX == 5) derechaX = 1;
+	
 		
 		int izquierdaX = posicionActual.x() - 1;
 		int izquierdaY = posicionActual.y();
-		if(izquierdaX == 0) izquierdaX = 4;
+	
 		
 		mundoPercibido.actualizarCelda(arribaX, arribaY, 0);
 		mundoPercibido.actualizarCelda(abajoX, abajoY, 0);
 		mundoPercibido.actualizarCelda(derechaX, derechaY, 0);
 		mundoPercibido.actualizarCelda(izquierdaX, izquierdaY, 0);
+		
 	}
 
 	public void arriba() {

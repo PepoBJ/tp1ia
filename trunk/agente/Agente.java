@@ -32,7 +32,7 @@ public class Agente {
 		if (sol != null && ! sol.isEmpty()) {
 			return (String)sol.getLast();
 		} else {
-			return "comer";
+			return "izquierda";
 		}
 	}
 	

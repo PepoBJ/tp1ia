@@ -42,6 +42,7 @@ public class MundoPercibido {
 		}
 		x -= 1;
 		y -= 1;
+		
 		((Vector)posiciones.elementAt(x)).setElementAt(new Integer(valor), y);
 		
 	}
