@@ -18,6 +18,7 @@ public class Busqueda {
 	
 	private static LinkedList buscar2(Nodo n){
 		if(objetivo(n.getEstado())){
+			System.out.print("Objetivo encontrado");
 			return solucion(n);
 		}
 		
@@ -26,7 +27,7 @@ public class Busqueda {
 			temp.arriba();
 			Nodo nodo = new Nodo(temp,"arriba",n);
 			LinkedList v = buscar2(nodo); 
-			if(v != null){
+			if(v != null && ! v.isEmpty()){
 				return v; 
 			}
 			
@@ -34,7 +35,7 @@ public class Busqueda {
 			temp.abajo();
 			nodo = new Nodo(temp,"abajo",n);
 			v = buscar2(nodo); 
-			if(v != null){
+			if(v != null && ! v.isEmpty()){
 				return v; 
 			}
 
@@ -42,7 +43,7 @@ public class Busqueda {
 			temp.derecha();
 			nodo = new Nodo(temp,"derecha",n);
 			v = buscar2(nodo); 
-			if(v != null){
+			if(v != null && ! v.isEmpty()){
 				return v; 
 			}
 			
@@ -50,7 +51,7 @@ public class Busqueda {
 			temp.izquierda();
 			nodo = new Nodo(temp,"izquierda",n);
 			v = buscar2(nodo); 
-			if(v != null){
+			if(v != null && ! v.isEmpty()){
 				return v; 
 			}
 			
@@ -58,7 +59,7 @@ public class Busqueda {
 			temp.comer();
 			nodo = new Nodo(temp,"comer",n);
 			v = buscar2(nodo); 
-			if(v != null){
+			if(v != null && ! v.isEmpty()){
 				return v; 
 			}
 			
@@ -66,7 +67,7 @@ public class Busqueda {
 			temp.pelear();
 			nodo = new Nodo(temp,"pelear",n);
 			v = buscar2(nodo); 
-			if(v != null){
+			if(v != null && ! v.isEmpty()){
 				return v; 
 			}			
 		}
