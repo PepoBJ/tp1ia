@@ -12,7 +12,7 @@ public class Agente {
 	public String accion(Percepcion p){
 		this.actualizarEstado(p);
 		String accion = this.elegirMejorAccion();
-		this.actualizarEstado2();
+		this.actualizarEstado2(accion);
 		return accion;
 	}
 	
@@ -34,9 +34,8 @@ public class Agente {
 		}
 	}
 	
-	private void actualizarEstado2(){
-		
-		
+	private void actualizarEstado2(String accion){
+		this.estado.agregarAccionPos(accion);
 	}
 
 
