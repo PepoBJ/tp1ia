@@ -16,26 +16,6 @@ public class MundoPercibido {
 		for (int i = 1; i < 5; i++){
 			posiciones.add(celdas.clone());	
 		}
-		
-		
-	}
-
-	public Object clone() {
-		MundoPercibido m = new MundoPercibido();
-//		m.posiciones = (Vector) this.posiciones.clone();
-		m.posiciones = this.clonarPosiciones();
-		return m;		
-	}
-	
-	public Vector clonarPosiciones(){
-		Vector result = new Vector();
-		Vector temp;
-		for(int i=0; i < 4; i++){
-			temp = (Vector)((Vector)posiciones.elementAt(i)).clone();
-			result.add(temp);
-		}
-		
-		return result;
 	}
 	
 	public void actualizarCelda(int x, int y, int valor) {
@@ -86,10 +66,6 @@ public class MundoPercibido {
 		return posiciones;
 	}
 	
-	public static void main(String[] args) {
-		MundoPercibido a = new MundoPercibido();
-		
-	}
 	public String toString(Pair p){
 		String result = "";
 		String c;
@@ -107,5 +83,28 @@ public class MundoPercibido {
 		}
 		return result;
 	}
+
+	/**
+	 * Se utiliza este metodo en lugar de clone()  
+	 * porque clone() no clona bien :)
+	 */
+	public Vector clonarPosiciones(){
+		Vector result = new Vector();
+		Vector temp;
+		for(int i=0; i < 4; i++){
+			temp = (Vector)((Vector)posiciones.elementAt(i)).clone();
+			result.add(temp);
+		}
+		
+		return result;
+	}
+	
+	
+	public Object clone() {
+		MundoPercibido m = new MundoPercibido();
+		m.posiciones = this.clonarPosiciones();
+		return m;		
+	}
+	
 
 }
