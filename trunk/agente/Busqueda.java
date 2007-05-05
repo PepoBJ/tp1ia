@@ -23,36 +23,47 @@ public class Busqueda {
 		}
 		
 		if(n.getProfundidad() < 8){
-			Estado temp =(Estado) n.getEstado().clone();
-			temp.arriba();
-			Nodo nodo = new Nodo(temp,"arriba",n);
-			LinkedList v = buscar2(nodo); 
-			if(v != null && ! v.isEmpty()){
-				return v; 
+			Estado temp;
+			Nodo nodo;
+			LinkedList v;
+			if(! n.getEstado().accionPosRepetida("arriba")){
+				temp =(Estado) n.getEstado().clone();
+				temp.arriba();
+				nodo = new Nodo(temp,"arriba",n);
+				v = buscar2(nodo); 
+				if(v != null && ! v.isEmpty()){
+					return v; 
+				}
 			}
 			
-			temp =(Estado) n.getEstado().clone();
-			temp.abajo();
-			nodo = new Nodo(temp,"abajo",n);
-			v = buscar2(nodo); 
-			if(v != null && ! v.isEmpty()){
-				return v; 
-			}
-
-			temp =(Estado) n.getEstado().clone();
-			temp.derecha();
-			nodo = new Nodo(temp,"derecha",n);
-			v = buscar2(nodo); 
-			if(v != null && ! v.isEmpty()){
-				return v; 
+			if(! n.getEstado().accionPosRepetida("abajo")){
+				temp =(Estado) n.getEstado().clone();
+				temp.abajo();
+				nodo = new Nodo(temp,"abajo",n);
+				v = buscar2(nodo); 
+				if(v != null && ! v.isEmpty()){
+					return v; 
+				}
 			}
 			
-			temp =(Estado) n.getEstado().clone();
-			temp.izquierda();
-			nodo = new Nodo(temp,"izquierda",n);
-			v = buscar2(nodo); 
-			if(v != null && ! v.isEmpty()){
-				return v; 
+			if(! n.getEstado().accionPosRepetida("derecha")){
+				temp =(Estado) n.getEstado().clone();
+				temp.derecha();
+				nodo = new Nodo(temp,"derecha",n);
+				v = buscar2(nodo); 
+				if(v != null && ! v.isEmpty()){
+					return v; 
+				}
+			}
+			
+			if(! n.getEstado().accionPosRepetida("izquierda")){
+				temp =(Estado) n.getEstado().clone();
+				temp.izquierda();
+				nodo = new Nodo(temp,"izquierda",n);
+				v = buscar2(nodo); 
+				if(v != null && ! v.isEmpty()){
+					return v; 
+				}
 			}
 			
 			temp =(Estado) n.getEstado().clone();

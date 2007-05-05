@@ -8,7 +8,7 @@ import calculador.Pair;
 public class Simulador {
 	private Calculador calculador;
 	private Agente agente;
-	static int MAX_CICLOS = 100;
+	static int MAX_CICLOS = 20;
 	public Simulador() {
 		this.calculador = new Calculador();
 

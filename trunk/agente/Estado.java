@@ -1,5 +1,8 @@
 package agente;
 
+import java.util.*;
+
+
 import calculador.Pair;
 
 public class Estado {
@@ -9,11 +12,12 @@ public class Estado {
 	private MundoPercibido mundoPercibido;
 	private ExperienciaEnergetica experienciaEnergetica;
 	private Pair posicionActual;
+	private LinkedList secuenciaAccionPos;
 	
 	public Estado() {
 		mundoPercibido = new MundoPercibido();
-		experienciaEnergetica = new ExperienciaEnergetica();	
-		
+		experienciaEnergetica = new ExperienciaEnergetica();
+		secuenciaAccionPos = new LinkedList();		
 	}
 
 	public int getEnergiaActual() {
@@ -71,17 +75,13 @@ public class Estado {
 		System.out.println(mundoPercibido.toString(posicionActual));
 	}
 	
-	public Object clone(){
-		Estado e = new Estado();
-		e.energiaActual = this.energiaActual;
-		e.energiaAnterior = this.energiaAnterior;
-		e.mundoPercibido = (MundoPercibido) this.mundoPercibido.clone();
-		e.experienciaEnergetica = (ExperienciaEnergetica) this.experienciaEnergetica.clone();
-		e.posicionActual = new Pair(this.posicionActual.x(),this.posicionActual.y());
-		return e;
+	public void agregarAccionPos(String accion) {
+		LinkedList accionPos = new LinkedList();
+		accionPos.add( new Pair(this.posicionActual.x(),this.posicionActual.y()) );
+		accionPos.add( accion );
+		
+		secuenciaAccionPos.add(accionPos);		
 	}
-	
-	
 	
 	public boolean todoConocido() {
 		for(int i = 1; i < 5; i++){
@@ -130,6 +130,7 @@ public class Estado {
 		if (temp == 5) {temp = 1;}
 		temp-=1;
 		
+		agregarAccionPos("arriba");		
 		posicionActual.setY(temp);		
 		posicionesAdyacentes();
 
@@ -142,6 +143,7 @@ public class Estado {
 		if(temp == 0) temp = 4;
 		temp-=1;
 		
+		agregarAccionPos("abajo");
 		posicionActual.setY(temp);
 		posicionesAdyacentes();
 		//System.out.println("abajo");
@@ -153,9 +155,9 @@ public class Estado {
 		int temp = posicionActual.x() + 1;
 		if(temp == 5) temp = 1;
 		temp-=1;
-		
-		posicionActual.setX(temp);
 
+		agregarAccionPos("derecha");
+		posicionActual.setX(temp);
 		posicionesAdyacentes();
 		//System.out.println("derecha");
 		//System.out.println(mundoPercibido.toString(posicionActual));		
@@ -165,9 +167,9 @@ public class Estado {
 		int temp = posicionActual.x() - 1;
 		if(temp == 0) temp = 4;
 		temp-=1;
-		
-		posicionActual.setX(temp);
 
+		agregarAccionPos("izquierda");
+		posicionActual.setX(temp);
 		posicionesAdyacentes();
 		//System.out.println("izquierda");
 		//System.out.println(mundoPercibido.toString(posicionActual));		
@@ -181,6 +183,32 @@ public class Estado {
 	public void pelear() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public Object clone(){
+		Estado e = new Estado();
+		e.energiaActual = this.energiaActual;
+		e.energiaAnterior = this.energiaAnterior;
+		e.mundoPercibido = (MundoPercibido) this.mundoPercibido.clone();
+		e.experienciaEnergetica = (ExperienciaEnergetica) this.experienciaEnergetica.clone();
+		e.posicionActual = new Pair(this.posicionActual.x(),this.posicionActual.y());
+		e.secuenciaAccionPos = (LinkedList)secuenciaAccionPos.clone();
+		return e;
+	}
+
+	public boolean accionPosRepetida(String accion) {
+		Iterator i = secuenciaAccionPos.iterator();
+		while(i.hasNext()){
+			LinkedList l = (LinkedList)i.next();
+			Pair p = (Pair)l.get(0);
+			String a = (String)l.get(1);
+			if(p.x() == posicionActual.x() && 
+			   p.y() == posicionActual.y() && 
+			   a == accion){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
