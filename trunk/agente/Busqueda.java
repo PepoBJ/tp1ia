@@ -12,7 +12,7 @@ public class Busqueda {
 	
 	static LinkedList buscar(Estado e){
 		Nodo nodo = new Nodo(e);
-		
+		System.out.println("BBB1");
 		return buscar2(nodo);
 	}
 	
@@ -22,7 +22,7 @@ public class Busqueda {
 			return solucion(n);
 		}
 		
-		if(n.getProfundidad() < 7){
+		if(n.getProfundidad() < 8){
 			Estado temp =(Estado) n.getEstado().clone();
 			temp.arriba();
 			Nodo nodo = new Nodo(temp,"arriba",n);
@@ -71,7 +71,7 @@ public class Busqueda {
 				return v; 
 			}			
 		}
-
+		//System.out.println("CORTE");
 		return null;
 		
 		
@@ -85,11 +85,18 @@ public class Busqueda {
 	private static LinkedList solucion(Nodo n){
 		LinkedList s = new LinkedList();
 		
+/*<<<<<<< .mine
+		while(n.getPadre() != null){
+			
+			solucion.addAll(solucion(n.getPadre()));
+		}
+*/
 		while(! n.accion.equals("")){
 			s.add(n.accion);
 			n=n.getPadre();
 		}		
 		return s;		
+
 		
 	}
 	

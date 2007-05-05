@@ -2,6 +2,8 @@ package agente;
 
 import java.util.Vector;
 
+import calculador.Pair;
+
 public class MundoPercibido {
 	Vector posiciones;
 	public MundoPercibido() {
@@ -20,8 +22,20 @@ public class MundoPercibido {
 
 	public Object clone() {
 		MundoPercibido m = new MundoPercibido();
-		m.posiciones = (Vector) this.posiciones.clone();
+//		m.posiciones = (Vector) this.posiciones.clone();
+		m.posiciones = this.clonarPosiciones();
 		return m;		
+	}
+	
+	public Vector clonarPosiciones(){
+		Vector result = new Vector();
+		Vector temp;
+		for(int i=0; i < 4; i++){
+			temp = (Vector)((Vector)posiciones.elementAt(i)).clone();
+			result.add(temp);
+		}
+		
+		return result;
 	}
 	
 	public void actualizarCelda(int x, int y, int valor) {
@@ -42,12 +56,26 @@ public class MundoPercibido {
 		}
 		x -= 1;
 		y -= 1;
-		
 		((Vector)posiciones.elementAt(x)).setElementAt(new Integer(valor), y);
 		
 	}
 	
 	public int getCeldaAt(int x, int y){
+		if (x < 1) {
+			x = 4;
+		}
+		
+		if (x > 4) {
+			x = 1;
+		}
+		
+		if (y < 1){
+			y = 4;
+		}
+			
+		if (y > 4) {
+			y = 1;
+		}		
 		x-=1;
 		y-=1;
 		Integer t = (Integer)((Vector)posiciones.elementAt(x)).elementAt(y);
@@ -61,6 +89,23 @@ public class MundoPercibido {
 	public static void main(String[] args) {
 		MundoPercibido a = new MundoPercibido();
 		
+	}
+	public String toString(Pair p){
+		String result = "";
+		String c;
+		for(int i =4; i>0; i--){
+			for(int j=1;j<5; j++){
+				c = new Integer(getCeldaAt(j, i)).toString();
+				if(p.x() == j && p.y() == i){
+					c = " P";
+				}else if(getCeldaAt(j, i) != -1)
+					c = " " + new Integer(getCeldaAt(j, i)).toString();
+				result += c + " ";
+			}
+			result+="\n";
+			
+		}
+		return result;
 	}
 
 }

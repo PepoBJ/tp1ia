@@ -29,7 +29,23 @@ public class Percepcion {
 	}
 
 	public int process(int x, int y, Vector comida, Vector enemigos) {
-		Pair p = new Pair(x,y);
+		if (x < 1) {
+			x = 4;
+		}
+		
+		if (x > 4) {
+			x = 1;
+		}
+		
+		if (y < 1){
+			y = 4;
+		}
+			
+		if (y > 4) {
+			y = 1;
+		}
+
+		Pair p = new Pair(x,y);		
 		
 		Iterator i = comida.iterator();		
 		while (i.hasNext()) {
