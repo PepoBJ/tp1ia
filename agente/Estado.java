@@ -68,6 +68,7 @@ public class Estado {
 		mundoPercibido.actualizarCelda(x + 1,y,p.getDer());
 		mundoPercibido.actualizarCelda(x - 1,y,p.getIzq());
 
+		System.out.println(mundoPercibido.toString(posicionActual));
 	}
 	
 	public Object clone(){
@@ -95,60 +96,81 @@ public class Estado {
 	private void posicionesAdyacentes(){
 		int arribaY = posicionActual.y() + 1;
 		int arribaX = posicionActual.x();
+		int arribaValor = mundoPercibido.getCeldaAt(arribaX, arribaY);
+		if(arribaValor == -1) arribaValor = 0;
 		
 		int abajoY = posicionActual.y() - 1;
 		int abajoX = posicionActual.x();
+		int abajoValor = mundoPercibido.getCeldaAt(abajoX, abajoY);
+		if(abajoValor == -1) abajoValor = 0;		
 		
 		int derechaX = posicionActual.x() + 1;
 		int derechaY = posicionActual.y();
+		int derechaValor = mundoPercibido.getCeldaAt(derechaX, derechaY);
+		if(derechaValor == -1) derechaValor = 0;		
 	
 		
 		int izquierdaX = posicionActual.x() - 1;
 		int izquierdaY = posicionActual.y();
+		int izquierdaValor = mundoPercibido.getCeldaAt(izquierdaX, izquierdaY);
+		if(izquierdaValor == -1) izquierdaValor = 0;		
+		
 	
 		
-		mundoPercibido.actualizarCelda(arribaX, arribaY, 0);
-		mundoPercibido.actualizarCelda(abajoX, abajoY, 0);
-		mundoPercibido.actualizarCelda(derechaX, derechaY, 0);
-		mundoPercibido.actualizarCelda(izquierdaX, izquierdaY, 0);
+		mundoPercibido.actualizarCelda(arribaX, arribaY, arribaValor);
+		mundoPercibido.actualizarCelda(abajoX, abajoY, abajoValor);
+		mundoPercibido.actualizarCelda(derechaX, derechaY, derechaValor);
+		mundoPercibido.actualizarCelda(izquierdaX, izquierdaY, izquierdaValor);
 		
 	}
-
+	
+	//	setY() setea Columnas no Posiciones!!!!
 	public void arriba() {
 		int temp = posicionActual.y() + 1;
-		if (temp == 5) {
-			temp = 1;
-		}
-
-		posicionActual.setY(temp);
+		if (temp == 5) {temp = 1;}
+		temp-=1;
+		
+		posicionActual.setY(temp);		
 		posicionesAdyacentes();
+
+		//System.out.println("arriba");
+		//System.out.println(mundoPercibido.toString(posicionActual));
 	}
 
 	public void abajo() {
 		int temp = posicionActual.y() - 1;
 		if(temp == 0) temp = 4;
-
+		temp-=1;
+		
 		posicionActual.setY(temp);
 		posicionesAdyacentes();
+		//System.out.println("abajo");
+		//System.out.println(mundoPercibido.toString(posicionActual));		
+		
 	}
 
 	public void derecha() {
 		int temp = posicionActual.x() + 1;
 		if(temp == 5) temp = 1;
-
+		temp-=1;
+		
 		posicionActual.setX(temp);
 
 		posicionesAdyacentes();
+		//System.out.println("derecha");
+		//System.out.println(mundoPercibido.toString(posicionActual));		
 	}
 
 	public void izquierda() {
 		int temp = posicionActual.x() - 1;
 		if(temp == 0) temp = 4;
-
+		temp-=1;
+		
 		posicionActual.setX(temp);
 
 		posicionesAdyacentes();
-		
+		//System.out.println("izquierda");
+		//System.out.println(mundoPercibido.toString(posicionActual));		
 	}
 
 	public void comer() {

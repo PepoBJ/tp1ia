@@ -11,11 +11,8 @@ public class Agente {
 	
 	public String accion(Percepcion p){
 		this.actualizarEstado(p);
-		
 		String accion = this.elegirMejorAccion();
-		
 		this.actualizarEstado2();
-		
 		return accion;
 	}
 	
@@ -26,13 +23,14 @@ public class Agente {
 	private String elegirMejorAccion(){
 		Estado clon;
 		clon = (Estado)estado.clone();
-
 		
 		LinkedList sol = Busqueda.buscar(clon);
 		if (sol != null && ! sol.isEmpty()) {
+			System.out.println("EEE2");
 			return (String)sol.getLast();
 		} else {
-			return "izquierda";
+			System.out.println("EEE3");
+			return "terminar";
 		}
 	}
 	
