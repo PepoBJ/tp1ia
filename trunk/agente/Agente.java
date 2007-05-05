@@ -24,12 +24,10 @@ public class Agente {
 		Estado clon;
 		clon = (Estado)estado.clone();
 		
-		LinkedList sol = Busqueda.buscar(clon);
+		LinkedList sol = Busqueda.buscarPila(clon);
 		if (sol != null && ! sol.isEmpty()) {
-			System.out.println("EEE2");
 			return (String)sol.getLast();
 		} else {
-			System.out.println("EEE3");
 			return "terminar";
 		}
 	}

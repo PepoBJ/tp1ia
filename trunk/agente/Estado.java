@@ -20,46 +20,6 @@ public class Estado {
 		secuenciaAccionPos = new LinkedList();		
 	}
 
-	public int getEnergiaActual() {
-		return energiaActual;
-	}
-
-	public void setEnergiaActual(int energiaActual) {
-		this.energiaActual = energiaActual;
-	}
-
-	public int getEnergiaAnterior() {
-		return energiaAnterior;
-	}
-
-	public void setEnergiaAnterior(int energiaAnterior) {
-		this.energiaAnterior = energiaAnterior;
-	}
-
-	public ExperienciaEnergetica getExperienciaEnergetica() {
-		return experienciaEnergetica;
-	}
-
-	public void setExperienciaEnergetica(ExperienciaEnergetica experienciaEnergetica) {
-		this.experienciaEnergetica = experienciaEnergetica;
-	}
-
-	public MundoPercibido getMundoPercibido() {
-		return mundoPercibido;
-	}
-
-	public void setMundoPercibido(MundoPercibido mundoPercibido) {
-		this.mundoPercibido = mundoPercibido;
-	}
-
-	public Pair getPosicionActual() {
-		return posicionActual;
-	}
-
-	public void setPosicionActual(Pair posicionActual) {
-		this.posicionActual = posicionActual;
-	}
-
 	public void actualizar(Percepcion p) {
 		posicionActual = p.getPosicionaActual();
 		energiaAnterior = energiaActual;
@@ -75,6 +35,12 @@ public class Estado {
 		System.out.println(mundoPercibido.toString(posicionActual));
 	}
 	
+	/**
+	 * Agrega la accion ejecutada y la posicion actual a  
+	 * la secuencia de acciones
+	 * @param accion accion ejecutada.
+	 */
+
 	public void agregarAccionPos(String accion) {
 		LinkedList accionPos = new LinkedList();
 		accionPos.add( new Pair(this.posicionActual.x(),this.posicionActual.y()) );
@@ -82,7 +48,12 @@ public class Estado {
 		
 		secuenciaAccionPos.add(accionPos);		
 	}
-	
+
+	/**
+	 * Determina si todo el mundo del Pacman es  
+	 * conocido. O sea que no haya ningun -1
+	 */
+
 	public boolean todoConocido() {
 		for(int i = 1; i < 5; i++){
 			for(int j = 1; j < 5; j++){
@@ -93,6 +64,10 @@ public class Estado {
 		return true;
 	}
 	
+	/**
+	 * Setea todas las posiciones adyacentes a las del Pacman  
+	 * en 0 a efectos de la simulacion
+	 */
 	private void posicionesAdyacentes(){
 		int arribaY = posicionActual.y() + 1;
 		int arribaX = posicionActual.x();
@@ -115,16 +90,16 @@ public class Estado {
 		int izquierdaValor = mundoPercibido.getCeldaAt(izquierdaX, izquierdaY);
 		if(izquierdaValor == -1) izquierdaValor = 0;		
 		
-	
-		
 		mundoPercibido.actualizarCelda(arribaX, arribaY, arribaValor);
 		mundoPercibido.actualizarCelda(abajoX, abajoY, abajoValor);
 		mundoPercibido.actualizarCelda(derechaX, derechaY, derechaValor);
 		mundoPercibido.actualizarCelda(izquierdaX, izquierdaY, izquierdaValor);
-		
 	}
 	
-	//	setY() setea Columnas no Posiciones!!!!
+	/**
+	 * Los Stes metodos solo son utilizados para la simulacion
+	 */
+
 	public void arriba() {
 		int temp = posicionActual.y() + 1;
 		if (temp == 5) {temp = 1;}
@@ -185,17 +160,11 @@ public class Estado {
 		
 	}
 	
-	public Object clone(){
-		Estado e = new Estado();
-		e.energiaActual = this.energiaActual;
-		e.energiaAnterior = this.energiaAnterior;
-		e.mundoPercibido = (MundoPercibido) this.mundoPercibido.clone();
-		e.experienciaEnergetica = (ExperienciaEnergetica) this.experienciaEnergetica.clone();
-		e.posicionActual = new Pair(this.posicionActual.x(),this.posicionActual.y());
-		e.secuenciaAccionPos = (LinkedList)secuenciaAccionPos.clone();
-		return e;
-	}
-
+	/**
+	 * Determina si ya se realizo accion estando  
+	 * el Pacman en la Posicion Actual
+	 * @param accion accion repetida.
+	 */
 	public boolean accionPosRepetida(String accion) {
 		Iterator i = secuenciaAccionPos.iterator();
 		while(i.hasNext()){
@@ -210,5 +179,110 @@ public class Estado {
 		}
 		return false;
 	}
+	
+	/**
+	 * Determina si una accion se repitio cant veces 
+	 * al final de la secuencia de acciones
+	 * @param accion accion repetida.
+	 * @param cant cantidad de veces.
+	 */
+	public boolean accionRepetida(String accion, int cant) {
+		int tamSec = secuenciaAccionPos.size();
+		if(tamSec < cant) return false;
+		
+		LinkedList l;
+		for( int i = 0; i < cant; i++){
+			l = (LinkedList) secuenciaAccionPos.get(tamSec - i -1);
+			String a = (String)l.get(1);
+			if(!a.equals(accion)) return false;
+		}
+		return true;
+	}
 
+	/**
+	 * Se fija si la ultima accion llevada a
+	 * cabo es una dada
+	 * @param accion es accion la ultima accion?.
+	 */
+	public boolean ultimaAccion(String accion){
+		if(secuenciaAccionPos.isEmpty())
+			return false;
+		
+		LinkedList l = (LinkedList) secuenciaAccionPos.getLast();
+		String a = (String) l.get(1); 
+		if(a.equals(accion))
+			return true;
+		return false;
+	}
+
+	/**
+	 * Se fija si hay comida en la celda en la que esta
+	 * parado el Pacman
+	 */
+	public boolean hayComida(){
+		if(mundoPercibido.getCeldaAt(posicionActual.x(), posicionActual.y()) == 1)
+			return true;
+		return false;
+	}
+
+	/**
+	 * Se fija si hay enemigo en la celda en la que esta
+	 * parado el Pacman
+	 */
+	public boolean hayEnemigo(){
+		if(mundoPercibido.getCeldaAt(posicionActual.x(), posicionActual.y()) == 2)
+			return true;
+		return false;
+	}	
+
+	public int getEnergiaActual() {
+		return energiaActual;
+	}
+
+	public void setEnergiaActual(int energiaActual) {
+		this.energiaActual = energiaActual;
+	}
+
+	public int getEnergiaAnterior() {
+		return energiaAnterior;
+	}
+
+	public void setEnergiaAnterior(int energiaAnterior) {
+		this.energiaAnterior = energiaAnterior;
+	}
+
+	public ExperienciaEnergetica getExperienciaEnergetica() {
+		return experienciaEnergetica;
+	}
+
+	public void setExperienciaEnergetica(ExperienciaEnergetica experienciaEnergetica) {
+		this.experienciaEnergetica = experienciaEnergetica;
+	}
+
+	public MundoPercibido getMundoPercibido() {
+		return mundoPercibido;
+	}
+
+	public void setMundoPercibido(MundoPercibido mundoPercibido) {
+		this.mundoPercibido = mundoPercibido;
+	}
+
+	public Pair getPosicionActual() {
+		return posicionActual;
+	}
+
+	public void setPosicionActual(Pair posicionActual) {
+		this.posicionActual = posicionActual;
+	}	
+	
+	public Object clone(){
+		Estado e = new Estado();
+		e.energiaActual = this.energiaActual;
+		e.energiaAnterior = this.energiaAnterior;
+		e.mundoPercibido = (MundoPercibido) this.mundoPercibido.clone();
+		e.experienciaEnergetica = (ExperienciaEnergetica) this.experienciaEnergetica.clone();
+		e.posicionActual = new Pair(this.posicionActual.x(),this.posicionActual.y());
+		e.secuenciaAccionPos = (LinkedList)secuenciaAccionPos.clone();
+		return e;
+	}	
 }
