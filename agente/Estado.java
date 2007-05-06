@@ -108,9 +108,6 @@ public class Estado {
 		agregarAccionPos("arriba");		
 		posicionActual.setY(temp);		
 		posicionesAdyacentes();
-
-		//System.out.println("arriba");
-		//System.out.println(mundoPercibido.toString(posicionActual));
 	}
 
 	public void abajo() {
@@ -121,9 +118,6 @@ public class Estado {
 		agregarAccionPos("abajo");
 		posicionActual.setY(temp);
 		posicionesAdyacentes();
-		//System.out.println("abajo");
-		//System.out.println(mundoPercibido.toString(posicionActual));		
-		
 	}
 
 	public void derecha() {
@@ -134,8 +128,6 @@ public class Estado {
 		agregarAccionPos("derecha");
 		posicionActual.setX(temp);
 		posicionesAdyacentes();
-		//System.out.println("derecha");
-		//System.out.println(mundoPercibido.toString(posicionActual));		
 	}
 
 	public void izquierda() {
@@ -146,18 +138,14 @@ public class Estado {
 		agregarAccionPos("izquierda");
 		posicionActual.setX(temp);
 		posicionesAdyacentes();
-		//System.out.println("izquierda");
-		//System.out.println(mundoPercibido.toString(posicionActual));		
 	}
 
 	public void comer() {
-		// TODO Auto-generated method stub
-		
+		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
 	}
 
 	public void pelear() {
-		// TODO Auto-generated method stub
-		
+		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
 	}
 	
 	/**
