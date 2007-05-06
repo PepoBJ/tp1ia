@@ -24,9 +24,14 @@ public class Agente {
 		Estado clon;
 		clon = (Estado)estado.clone();
 		
-		LinkedList sol = Busqueda.buscarPila(clon);
+		LinkedList sol = Busqueda.buscarCosto(clon);
 		if (sol != null && ! sol.isEmpty()) {
-			return (String)sol.getLast();
+			String accion = (String)sol.getLast();
+			if(accion == "comer"){
+				estado.comer();
+			}
+				
+			return accion;
 		} else {
 			return "terminar";
 		}

@@ -1,107 +1,27 @@
 package agente;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Stack;
 
 public class Busqueda {
 	static Stack nodosExpandirPila;
-
+	static LinkedList nodosExpandirCola;
+	static PriorityQueue nodosExpandirColaPrioridad;
 	public Busqueda() {
 
 	}
 
 	/**
-	 * Busqueda en profundidad con recursion
-	 * determinada accion
-	 * @param e Estado actual del mundo del Pacman.
-	 */
-	static LinkedList buscar(Estado e){
-		Nodo nodo = new Nodo(e);
-		System.out.println("BBB1");
-		return buscar2(nodo);
-	}
-
-	private static LinkedList buscar2(Nodo n){
-		if(objetivo(n.getEstado())){
-			System.out.print("Objetivo encontrado");
-			return solucion(n);
-		}
-
-		if(n.getProfundidad() < 8){
-			Estado temp;
-			Nodo nodo;
-			LinkedList v;
-			if(! n.getEstado().accionPosRepetida("arriba")){
-				temp =(Estado) n.getEstado().clone();
-				temp.arriba();
-				nodo = new Nodo(temp,"arriba",n);
-				v = buscar2(nodo); 
-				if(v != null && ! v.isEmpty()){
-					return v; 
-				}
-			}
-
-			if(! n.getEstado().accionPosRepetida("abajo")){
-				temp =(Estado) n.getEstado().clone();
-				temp.abajo();
-				nodo = new Nodo(temp,"abajo",n);
-				v = buscar2(nodo); 
-				if(v != null && ! v.isEmpty()){
-					return v; 
-				}
-			}
-
-			if(! n.getEstado().accionPosRepetida("derecha")){
-				temp =(Estado) n.getEstado().clone();
-				temp.derecha();
-				nodo = new Nodo(temp,"derecha",n);
-				v = buscar2(nodo); 
-				if(v != null && ! v.isEmpty()){
-					return v; 
-				}
-			}
-
-			if(! n.getEstado().accionPosRepetida("izquierda")){
-				temp =(Estado) n.getEstado().clone();
-				temp.izquierda();
-				nodo = new Nodo(temp,"izquierda",n);
-				v = buscar2(nodo); 
-				if(v != null && ! v.isEmpty()){
-					return v; 
-				}
-			}
-
-			temp =(Estado) n.getEstado().clone();
-			temp.comer();
-			nodo = new Nodo(temp,"comer",n);
-			v = buscar2(nodo); 
-			if(v != null && ! v.isEmpty()){
-				return v; 
-			}
-
-			temp =(Estado) n.getEstado().clone();
-			temp.pelear();
-			nodo = new Nodo(temp,"pelear",n);
-			v = buscar2(nodo); 
-			if(v != null && ! v.isEmpty()){
-				return v; 
-			}			
-		}
-		//System.out.println("CORTE");
-		return null;
-
-
-	}
-
-	/**
-	 * Busqueda en profundidad utilizando una PILA
-	 * determinada accion. Utiliza las precondiciones
+	 * Busqueda en profundidad utilizando una PILA.
+	 * Utiliza las precondiciones
 	 * para saber si un nodo debe ser expandido o no
 	 * @param e Estado actual del mundo del Pacman.
 	 */
-	public static LinkedList buscarPila(Estado e){
+	public static LinkedList buscarProfundidad(Estado e){
 		nodosExpandirPila = new Stack();
 		Nodo nodoInicial = new Nodo(e);
-		System.out.println("BBB1");
 		nodosExpandirPila.push(nodoInicial);
 
 		Nodo ste;
@@ -162,6 +82,132 @@ public class Busqueda {
 	}
 	
 	/**
+	 * Busqueda en amplitud utilizando un COLA (LinkedList).
+	 * Utiliza las precondiciones
+	 * para saber si un nodo debe ser expandido o no
+	 * @param e Estado actual del mundo del Pacman.
+	 */
+	public static LinkedList buscarAnchura(Estado e){
+		nodosExpandirCola = new LinkedList();
+		Nodo nodoInicial = new Nodo(e);
+		nodosExpandirCola.addLast(nodoInicial);
+
+		Nodo ste;
+		Estado temp;
+		while(!nodosExpandirCola.isEmpty()){
+
+			ste = (Nodo)nodosExpandirCola.removeFirst(); 
+
+			if(objetivo(ste.getEstado())){
+				System.out.print("Objetivo encontrado");
+				return solucion(ste);
+			}
+
+			if(precondicion("comer", ste)){
+				temp =(Estado) ste.getEstado().clone();
+				temp.comer();
+				nodosExpandirCola.addLast(new Nodo(temp,"comer",ste));
+			}
+			
+			if(precondicion("pelear", ste)){
+				temp =(Estado) ste.getEstado().clone();
+				temp.pelear();
+				nodosExpandirCola.addLast(new Nodo(temp,"pelear",ste));
+			}			
+
+			if(precondicion("arriba", ste)){
+				temp = (Estado) ste.getEstado().clone();
+				temp.arriba();
+				nodosExpandirCola.addLast(new Nodo(temp,"arriba",ste));
+			}
+
+			if(precondicion("abajo", ste)){
+				temp = (Estado) ste.getEstado().clone();
+				temp.abajo();
+				nodosExpandirCola.addLast(new Nodo(temp,"abajo",ste));
+			}
+
+			if(precondicion("derecha", ste)){
+				temp = (Estado) ste.getEstado().clone();
+				temp.derecha();
+				nodosExpandirCola.addLast(new Nodo(temp,"derecha",ste));
+			}
+
+			if(precondicion("izquierda", ste)){
+				temp = (Estado) ste.getEstado().clone();
+				temp.izquierda();
+				nodosExpandirCola.addLast(new Nodo(temp,"izquierda",ste));
+			}
+
+		}
+
+		return new LinkedList();
+	}
+	
+	/**
+	 * Busqueda en costo uniforme se utiliza una
+	 * COLA DE PRIORIDAD. Utiliza las precondiciones
+	 * para saber si un nodo debe ser expandido o no
+	 * @param e Estado actual del mundo del Pacman.
+	 */
+	public static LinkedList buscarCosto(Estado e){
+		nodosExpandirColaPrioridad = new PriorityQueue();
+		Nodo nodoInicial = new Nodo(e);
+		nodosExpandirColaPrioridad.add(nodoInicial);
+
+		Nodo ste;
+		Estado temp;
+		while(!nodosExpandirColaPrioridad.isEmpty()){
+
+			ste = (Nodo)nodosExpandirColaPrioridad.remove(); 
+
+			if(objetivo(ste.getEstado())){
+				System.out.print("Objetivo encontrado");
+				return solucion(ste);
+			}
+
+			if(precondicion("comer", ste)){
+				temp =(Estado) ste.getEstado().clone();
+				temp.comer();
+				nodosExpandirColaPrioridad.add(new Nodo(temp,"comer",ste));
+			}
+			
+			if(precondicion("pelear", ste)){
+				temp =(Estado) ste.getEstado().clone();
+				temp.pelear();
+				nodosExpandirColaPrioridad.add(new Nodo(temp,"pelear",ste));
+			}			
+
+			if(precondicion("arriba", ste)){
+				temp = (Estado) ste.getEstado().clone();
+				temp.arriba();
+				nodosExpandirColaPrioridad.add(new Nodo(temp,"arriba",ste));
+			}
+
+			if(precondicion("abajo", ste)){
+				temp = (Estado) ste.getEstado().clone();
+				temp.abajo();
+				nodosExpandirColaPrioridad.add(new Nodo(temp,"abajo",ste));
+			}
+
+			if(precondicion("derecha", ste)){
+				temp = (Estado) ste.getEstado().clone();
+				temp.derecha();
+				nodosExpandirColaPrioridad.add(new Nodo(temp,"derecha",ste));
+			}
+
+			if(precondicion("izquierda", ste)){
+				temp = (Estado) ste.getEstado().clone();
+				temp.izquierda();
+				nodosExpandirColaPrioridad.add(new Nodo(temp,"izquierda",ste));
+			}
+
+		}
+
+		return new LinkedList();
+	}	
+	
+	/**
 	 * Averigua si se cumplen las precondiciones para una
 	 * determinada accion
 	 * @param a La precondicion se aplica sobre la accion a.
@@ -171,8 +217,6 @@ public class Busqueda {
 		Estado e = n.getEstado();
 		if(a == "comer"){
 			if(e.accionPosRepetida("comer"))
-				return false;
-			if(e.accionRepetida("comer",1))
 				return false;
 			if(!e.hayComida())
 				return false;
@@ -189,6 +233,8 @@ public class Busqueda {
 				return false;
 			if(e.ultimaAccion("abajo"))
 				return false;
+			if(e.hayComida())
+				return false;
 		}
 			
 		if(a == "abajo"){
@@ -197,7 +243,9 @@ public class Busqueda {
 			if(e.accionRepetida("abajo",2))
 				return false;
 			if(e.ultimaAccion("arriba"))
-				return false;			
+				return false;
+			if(e.hayComida())
+				return false;
 		}
 			
 		if(a == "derecha"){
@@ -206,7 +254,9 @@ public class Busqueda {
 			if(e.accionRepetida("derecha",2))
 				return false;		
 			if(e.ultimaAccion("izquierda"))
-				return false;			
+				return false;
+			if(e.hayComida())
+				return false;
 		}
 
 		if(a == "izquierda"){
@@ -215,7 +265,9 @@ public class Busqueda {
 			if(e.accionRepetida("izquierda",2))
 				return false;			
 			if(e.ultimaAccion("derecha"))
-				return false;			
+				return false;
+			if(e.hayComida())
+				return false;
 			
 		}
 		
@@ -233,6 +285,7 @@ public class Busqueda {
 	}
 
 	private static LinkedList solucion(Nodo n){
+		System.out.println("COSTO " + n.costo);
 		LinkedList s = new LinkedList();
 
 		while(! n.accion.equals("")){
@@ -244,11 +297,12 @@ public class Busqueda {
 
 	}
 
-	static class Nodo{
+	static class Nodo implements Comparable{
 		Nodo padre;
 		Estado estado;
 		String accion;
 		int profundidad;
+		int costo;
 
 		public Nodo(Estado estado, String accion, Nodo padre) {
 			super();
@@ -256,9 +310,23 @@ public class Busqueda {
 			this.estado = estado;
 			this.accion = accion;
 			this.profundidad = padre.getProfundidad() + 1;
-
+			this.costo = this.costoAccion(accion, estado) + profundidad;
 		}
 
+
+		private int costoAccion(String accion, Estado e) {
+			if(accion == "comer")
+				return 1;
+			
+			if(accion == "pelear")
+				return 20;
+			
+			if(e.hayComida())
+				return 5;
+			
+			return 15;
+			
+		}
 
 		public Nodo(Estado estado) {
 			super();
@@ -289,6 +357,17 @@ public class Busqueda {
 		}
 		public void setPadre(Nodo padre) {
 			this.padre = padre;
+		}
+		
+		public int compareTo(Object n){
+			if(this.costo == ((Nodo)n).costo)
+				return 0;
+			
+			if(this.costo > ((Nodo)n).costo)
+				return 1;
+				
+			return -1;
+			
 		}
 	}
 
