@@ -24,12 +24,10 @@ public class Agente {
 		Estado clon;
 		clon = (Estado)estado.clone();
 		
-		LinkedList sol = Busqueda.buscarCosto(clon);
+		LinkedList sol = Busqueda.buscarProfundidad(clon);
 		if (sol != null && ! sol.isEmpty()) {
 			String accion = (String)sol.getLast();
-			if(accion == "comer"){
-				estado.comer();
-			}
+			this.actualizarEstado2(accion);
 				
 			return accion;
 		} else {
@@ -39,6 +37,12 @@ public class Agente {
 	
 	private void actualizarEstado2(String accion){
 		this.estado.agregarAccionPos(accion);
+		if(accion == "comer"){
+			estado.comer();
+		}
+		if(accion == "pelear"){
+			estado.pelear();
+		}
 	}
 
 

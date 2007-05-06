@@ -22,7 +22,7 @@ public class Simulador {
 		int energia = this.calculador.calcularEnergiaPacMan("");
 		int ciclo = 0;
 		while (ciclo < MAX_CICLOS) {
-			System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
+			System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y()+" performance: "+this.calculador.getPerformance());
 			
 			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
 			System.out.println(ciclo+") "+percepcion);
