@@ -39,12 +39,6 @@ public class Busqueda {
 				continue;
 			}
 
-			if(precondicion("pelear", ste)){
-				temp =(Estado) ste.getEstado().clone();
-				temp.pelear();
-				nodosExpandirPila.push(new Nodo(temp,"pelear",ste));
-			}			
-
 			if(precondicion("arriba", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.arriba();
@@ -75,6 +69,12 @@ public class Busqueda {
 				nodosExpandirPila.push(new Nodo(temp,"comer",ste));
 			}
 			
+
+			if(precondicion("pelear", ste)){
+				temp =(Estado) ste.getEstado().clone();
+				temp.pelear();
+				nodosExpandirPila.push(new Nodo(temp,"pelear",ste));
+			}			
 
 		}
 
@@ -216,14 +216,14 @@ public class Busqueda {
 	private static boolean precondicion(String a, Nodo n){
 		Estado e = n.getEstado();
 		if(a == "comer"){
-			if(e.accionPosRepetida("comer"))
-				return false;
 			if(!e.hayComida())
 				return false;
 		}
 
 		if(a == "pelear"){
-			return false;			
+			if (!e.hayEnemigo()) {
+				return false;
+			}		
 		}
 			
 		if(a == "arriba"){
