@@ -27,8 +27,7 @@ public class Agente {
 		LinkedList sol = Busqueda.buscarProfundidad(clon);
 		if (sol != null && ! sol.isEmpty()) {
 			String accion = (String)sol.getLast();
-			this.actualizarEstado2(accion);
-				
+							
 			return accion;
 		} else {
 			return "terminar";
