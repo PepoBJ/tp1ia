@@ -66,7 +66,7 @@ public class MundoPercibido {
 		return posiciones;
 	}
 	
-	public String toString(Pair p){
+	public String toString(Pair2 p){
 		String result = "";
 		String c;
 		for(int i =4; i>0; i--){

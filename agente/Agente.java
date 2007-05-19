@@ -37,10 +37,10 @@ public class Agente {
 	private void actualizarEstado2(String accion){
 		this.estado.agregarAccionPos(accion);
 		if(accion == "comer"){
-			estado.comer();
+			estado.comerAccion();
 		}
 		if(accion == "pelear"){
-			estado.pelear();
+			estado.pelearAccion();
 		}
 	}
 

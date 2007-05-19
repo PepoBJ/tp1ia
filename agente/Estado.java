@@ -11,26 +11,31 @@ public class Estado {
 	private int energiaAnterior;
 	private MundoPercibido mundoPercibido;
 	private ExperienciaEnergetica experienciaEnergetica;
-	private Pair posicionActual;
+	private Pair2 posicionActual;
 	private LinkedList secuenciaAccionPos;
 	
 	public Estado() {
 		mundoPercibido = new MundoPercibido();
 		experienciaEnergetica = new ExperienciaEnergetica();
-		secuenciaAccionPos = new LinkedList();		
+		secuenciaAccionPos = new LinkedList();
 	}
 
 	public void actualizar(Percepcion p) {
-		posicionActual = p.getPosicionaActual();
+		posicionActual = new Pair2(p.getPosicionActual());
 		energiaAnterior = energiaActual;
 		energiaActual = p.getEnergia();
 		
 		int x = posicionActual.x();
 		int y = posicionActual.y();
-		mundoPercibido.actualizarCelda(x,y - 1,p.getAbajo());
-		mundoPercibido.actualizarCelda(x,y + 1,p.getArriba());
-		mundoPercibido.actualizarCelda(x + 1,y,p.getDer());
-		mundoPercibido.actualizarCelda(x - 1,y,p.getIzq());
+		
+		if(mundoPercibido.getCeldaAt(x, y - 1) == -1)
+			mundoPercibido.actualizarCelda(x,y - 1,p.getAbajo());
+		if(mundoPercibido.getCeldaAt(x, y + 1) == -1)
+			mundoPercibido.actualizarCelda(x,y + 1,p.getArriba());
+		if(mundoPercibido.getCeldaAt(x + 1, y) == -1)
+			mundoPercibido.actualizarCelda(x + 1,y,p.getDer());
+		if(mundoPercibido.getCeldaAt(x - 1, y) == -1)
+			mundoPercibido.actualizarCelda(x - 1,y,p.getIzq());
 
 		System.out.println(mundoPercibido.toString(posicionActual));
 	}
@@ -62,6 +67,36 @@ public class Estado {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Determina si todos los enemigos del Pacman estan   
+	 * muertos. O sea que no haya ningun -1 y 2
+	 */
+	
+	public boolean todoEnemigosMuertos() {
+		for(int i = 1; i < 5; i++){
+			for(int j = 1; j < 5; j++){
+				if(mundoPercibido.getCeldaAt(i, j) == -1 ||
+				   mundoPercibido.getCeldaAt(i, j) == 2	
+				)
+					return false;
+			}
+		}
+		return true;	
+	}
+	
+	public boolean todoComidaConsumida() {
+		for(int i = 1; i < 5; i++){
+			for(int j = 1; j < 5; j++){
+				if(mundoPercibido.getCeldaAt(i, j) == -1 ||
+				   mundoPercibido.getCeldaAt(i, j) == 1  ||
+				   mundoPercibido.getCeldaAt(i, j) == 2	
+				)
+					return false;
+			}
+		}
+		return true;	
 	}
 	
 	/**
@@ -103,8 +138,7 @@ public class Estado {
 	public void arriba() {
 		int temp = posicionActual.y() + 1;
 		if (temp == 5) {temp = 1;}
-		temp-=1;
-		
+				
 		agregarAccionPos("arriba");		
 		posicionActual.setY(temp);		
 		posicionesAdyacentes();
@@ -113,8 +147,7 @@ public class Estado {
 	public void abajo() {
 		int temp = posicionActual.y() - 1;
 		if(temp == 0) temp = 4;
-		temp-=1;
-		
+				
 		agregarAccionPos("abajo");
 		posicionActual.setY(temp);
 		posicionesAdyacentes();
@@ -123,8 +156,7 @@ public class Estado {
 	public void derecha() {
 		int temp = posicionActual.x() + 1;
 		if(temp == 5) temp = 1;
-		temp-=1;
-
+		
 		agregarAccionPos("derecha");
 		posicionActual.setX(temp);
 		posicionesAdyacentes();
@@ -133,8 +165,7 @@ public class Estado {
 	public void izquierda() {
 		int temp = posicionActual.x() - 1;
 		if(temp == 0) temp = 4;
-		temp-=1;
-
+		
 		agregarAccionPos("izquierda");
 		posicionActual.setX(temp);
 		posicionesAdyacentes();
@@ -142,9 +173,19 @@ public class Estado {
 
 	public void comer() {
 		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
+		this.energiaActual += 10;
+	}
+	
+	public void comerAccion() {
+		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
 	}
 
 	public void pelear() {
+		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
+		this.energiaActual -= 10;
+	}
+
+	public void pelearAccion() {
 		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
 	}
 	
@@ -255,12 +296,12 @@ public class Estado {
 		this.mundoPercibido = mundoPercibido;
 	}
 
-	public Pair getPosicionActual() {
+	public Pair2 getPosicionActual() {
 		return posicionActual;
 	}
 
 	public void setPosicionActual(Pair posicionActual) {
-		this.posicionActual = posicionActual;
+		this.posicionActual = new Pair2(posicionActual);
 	}	
 	
 	public Object clone(){
@@ -269,8 +310,12 @@ public class Estado {
 		e.energiaAnterior = this.energiaAnterior;
 		e.mundoPercibido = (MundoPercibido) this.mundoPercibido.clone();
 		e.experienciaEnergetica = (ExperienciaEnergetica) this.experienciaEnergetica.clone();
-		e.posicionActual = new Pair(this.posicionActual.x(),this.posicionActual.y());
+		e.posicionActual = new Pair2(this.posicionActual);
 		e.secuenciaAccionPos = (LinkedList)secuenciaAccionPos.clone();
 		return e;
-	}	
+	}
+	
+
+
+	
 }
