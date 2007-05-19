@@ -35,7 +35,7 @@ public class Busqueda {
 				return solucion(ste);
 			}
 
-			if(ste.getProfundidad() > 7){
+			if(ste.getProfundidad() > 30){
 				continue;
 			}
 
@@ -102,7 +102,7 @@ public class Busqueda {
 				System.out.print("Objetivo encontrado");
 				return solucion(ste);
 			}
-
+			
 			if(precondicion("comer", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.comer();
@@ -223,7 +223,10 @@ public class Busqueda {
 		if(a == "pelear"){
 			if (!e.hayEnemigo()) {
 				return false;
-			}		
+			}
+			/*if(e.getEnergiaActual() < 5){
+				return false;
+			}*/
 		}
 			
 		if(a == "arriba"){

@@ -8,7 +8,7 @@ import calculador.Pair;
 public class Simulador {
 	private Calculador calculador;
 	private Agente agente;
-	static int MAX_CICLOS = 20;
+	static int MAX_CICLOS = 80;
 	public Simulador() {
 		this.calculador = new Calculador();
 
@@ -22,7 +22,7 @@ public class Simulador {
 		int energia = this.calculador.calcularEnergiaPacMan("");
 		int ciclo = 0;
 		while (ciclo < MAX_CICLOS) {
-			System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y()+" performance: "+this.calculador.getPerformance());
+			System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
 			
 			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
 			System.out.println(ciclo+") "+percepcion);
@@ -30,7 +30,8 @@ public class Simulador {
 			String accion = this.agente.accion(percepcion);
 			
 			System.out.println(" accion:"+accion);
-			if (accion == "terminar") {				
+			if (accion == "terminar") {
+				System.out.print(" performance: "+this.calculador.getPerformance());
 				break;
 			}
 			energia = this.calculador.calcularEnergiaPacMan(accion);

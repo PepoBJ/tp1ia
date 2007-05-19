@@ -86,7 +86,7 @@ public class Percepcion {
 		return izq;
 	}
 
-	public Pair getPosicionaActual() {
+	public Pair getPosicionActual() {
 		return posicionActual;
 	}
 
