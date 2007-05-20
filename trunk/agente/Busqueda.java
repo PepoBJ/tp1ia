@@ -1,6 +1,8 @@
 package agente;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
@@ -9,6 +11,8 @@ public class Busqueda {
 	static Stack nodosExpandirPila;
 	static LinkedList nodosExpandirCola;
 	static PriorityQueue nodosExpandirColaPrioridad;
+	static String recorrido = "";
+	
 	public Busqueda() {
 
 	}
@@ -20,18 +24,21 @@ public class Busqueda {
 	 * @param e Estado actual del mundo del Pacman.
 	 */
 	public static LinkedList buscarProfundidad(Estado e){
+		recorrido =  "";
 		nodosExpandirPila = new Stack();
 		Nodo nodoInicial = new Nodo(e);
 		nodosExpandirPila.push(nodoInicial);
 
 		Nodo ste;
+		Nodo tempNode;
 		Estado temp;
 		while(!nodosExpandirPila.empty()){
 
 			ste = (Nodo)nodosExpandirPila.pop(); 
-
 			if(objetivo(ste.getEstado())){
-				System.out.print("Objetivo encontrado");
+				System.out.println("Objetivo encontrado");
+				
+				imprimirArbol(nodoInicial,0, ste);
 				return solucion(ste);
 			}
 
@@ -42,38 +49,44 @@ public class Busqueda {
 			if(precondicion("arriba", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.arriba();
-				nodosExpandirPila.push(new Nodo(temp,"arriba",ste));
+				nodosExpandirPila.push(tempNode=new Nodo(temp,"arriba",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("abajo", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.abajo();
-				nodosExpandirPila.push(new Nodo(temp,"abajo",ste));
+				nodosExpandirPila.push(tempNode=new Nodo(temp,"abajo",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("derecha", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.derecha();
-				nodosExpandirPila.push(new Nodo(temp,"derecha",ste));
+				nodosExpandirPila.push(tempNode=new Nodo(temp,"derecha",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("izquierda", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.izquierda();
-				nodosExpandirPila.push(new Nodo(temp,"izquierda",ste));
+				nodosExpandirPila.push(tempNode=new Nodo(temp,"izquierda",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("comer", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.comer();
-				nodosExpandirPila.push(new Nodo(temp,"comer",ste));
+				nodosExpandirPila.push(tempNode=new Nodo(temp,"comer",ste));
+				ste.addHijos(tempNode);
 			}
 			
 
 			if(precondicion("pelear", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.pelear();
-				nodosExpandirPila.push(new Nodo(temp,"pelear",ste));
+				nodosExpandirPila.push(tempNode=new Nodo(temp,"pelear",ste));
+				ste.addHijos(tempNode);
 			}			
 
 		}
@@ -88,55 +101,70 @@ public class Busqueda {
 	 * @param e Estado actual del mundo del Pacman.
 	 */
 	public static LinkedList buscarAnchura(Estado e){
+		recorrido =  "";
 		nodosExpandirCola = new LinkedList();
 		Nodo nodoInicial = new Nodo(e);
 		nodosExpandirCola.addLast(nodoInicial);
 
 		Nodo ste;
+		Nodo tempNode;
 		Estado temp;
+		
 		while(!nodosExpandirCola.isEmpty()){
-
-			ste = (Nodo)nodosExpandirCola.removeFirst(); 
-
+			
+			ste = (Nodo)nodosExpandirCola.removeFirst();
+			
+			
 			if(objetivo(ste.getEstado())){
-				System.out.print("Objetivo encontrado");
+				System.out.println("Objetivo encontrado");
+				//System.out.println(recorrido);
+				
+				imprimirArbol(nodoInicial,1,ste);
+				
 				return solucion(ste);
 			}
 			
 			if(precondicion("comer", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.comer();
-				nodosExpandirCola.addLast(new Nodo(temp,"comer",ste));
+				nodosExpandirCola.addLast(tempNode=new Nodo(temp,"comer",ste));
+				ste.addHijos(tempNode);
+				
 			}
 			
 			if(precondicion("pelear", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.pelear();
-				nodosExpandirCola.addLast(new Nodo(temp,"pelear",ste));
+				nodosExpandirCola.addLast(tempNode=new Nodo(temp,"pelear",ste));
+				ste.addHijos(tempNode);
 			}			
 
 			if(precondicion("arriba", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.arriba();
-				nodosExpandirCola.addLast(new Nodo(temp,"arriba",ste));
+				nodosExpandirCola.addLast(tempNode=new Nodo(temp,"arriba",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("abajo", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.abajo();
-				nodosExpandirCola.addLast(new Nodo(temp,"abajo",ste));
+				nodosExpandirCola.addLast(tempNode=new Nodo(temp,"abajo",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("derecha", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.derecha();
-				nodosExpandirCola.addLast(new Nodo(temp,"derecha",ste));
+				nodosExpandirCola.addLast(tempNode=new Nodo(temp,"derecha",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("izquierda", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.izquierda();
-				nodosExpandirCola.addLast(new Nodo(temp,"izquierda",ste));
+				nodosExpandirCola.addLast(tempNode=new Nodo(temp,"izquierda",ste));
+				ste.addHijos(tempNode);
 			}
 
 		}
@@ -144,6 +172,7 @@ public class Busqueda {
 		return new LinkedList();
 	}
 	
+		
 	/**
 	 * Busqueda en costo uniforme se utiliza una
 	 * COLA DE PRIORIDAD. Utiliza las precondiciones
@@ -151,6 +180,7 @@ public class Busqueda {
 	 * @param e Estado actual del mundo del Pacman.
 	 */
 	public static LinkedList buscarCosto(Estado e){
+		Nodo tempNode;
 		nodosExpandirColaPrioridad = new PriorityQueue();
 		Nodo nodoInicial = new Nodo(e);
 		nodosExpandirColaPrioridad.add(nodoInicial);
@@ -162,6 +192,7 @@ public class Busqueda {
 			ste = (Nodo)nodosExpandirColaPrioridad.remove(); 
 
 			if(objetivo(ste.getEstado())){
+				//imprimirArbol(nodoInicial,1,ste);
 				System.out.print("Objetivo encontrado");
 				return solucion(ste);
 			}
@@ -169,43 +200,76 @@ public class Busqueda {
 			if(precondicion("comer", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.comer();
-				nodosExpandirColaPrioridad.add(new Nodo(temp,"comer",ste));
+				nodosExpandirColaPrioridad.add(tempNode=new Nodo(temp,"comer",ste));
+				ste.addHijos(tempNode);
+				
 			}
 			
 			if(precondicion("pelear", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.pelear();
-				nodosExpandirColaPrioridad.add(new Nodo(temp,"pelear",ste));
+				nodosExpandirColaPrioridad.add(tempNode=new Nodo(temp,"pelear",ste));
+				ste.addHijos(tempNode);
 			}			
 
 			if(precondicion("arriba", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.arriba();
-				nodosExpandirColaPrioridad.add(new Nodo(temp,"arriba",ste));
+				nodosExpandirColaPrioridad.add(tempNode=new Nodo(temp,"arriba",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("abajo", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.abajo();
-				nodosExpandirColaPrioridad.add(new Nodo(temp,"abajo",ste));
+				nodosExpandirColaPrioridad.add(tempNode=new Nodo(temp,"abajo",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("derecha", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.derecha();
-				nodosExpandirColaPrioridad.add(new Nodo(temp,"derecha",ste));
+				nodosExpandirColaPrioridad.add(tempNode=new Nodo(temp,"derecha",ste));
+				ste.addHijos(tempNode);
 			}
 
 			if(precondicion("izquierda", ste)){
 				temp = (Estado) ste.getEstado().clone();
 				temp.izquierda();
-				nodosExpandirColaPrioridad.add(new Nodo(temp,"izquierda",ste));
+				nodosExpandirColaPrioridad.add(tempNode=new Nodo(temp,"izquierda",ste));
+				ste.addHijos(tempNode);
 			}
 
 		}
 
 		return new LinkedList();
 	}	
+	
+	/**
+	 * Averigua si el estado es un estado objetivo
+	 * @param e Estado actual en el arbol de busqueda.
+	 */	
+	private static boolean objetivo(Estado e){
+		return e.todoComidaConsumida();
+	}
+	
+	/*Imprime una representacion en String
+	 * del proceso de busqueda
+	 * */
+	private static void imprimirArbol(Nodo n,int tab, Nodo f) {
+		List hijos = n.getListHijos();
+		Iterator i = hijos.iterator();
+		for(int x=0;x<tab;x++)
+			System.out.print("-*-");
+		System.out.print(n.getAccion());
+		if (n == f) System.out.println("  NODO FINAL");
+		System.out.println();
+		while(i.hasNext()){
+			n = (Nodo)i.next();
+			imprimirArbol(n,tab + 1, f);
+		}
+		
+	}
 	
 	/**
 	 * Averigua si se cumplen las precondiciones para una
@@ -234,7 +298,7 @@ public class Busqueda {
 				return false;			
 			if(e.accionRepetida("arriba",2))
 				return false;
-			if(e.ultimaAccion("abajo"))
+			if(e.ultimaMovimiento("abajo"))
 				return false;
 			if(e.hayComida())
 				return false;
@@ -245,7 +309,7 @@ public class Busqueda {
 				return false;
 			if(e.accionRepetida("abajo",2))
 				return false;
-			if(e.ultimaAccion("arriba"))
+			if(e.ultimaMovimiento("arriba"))
 				return false;
 			if(e.hayComida())
 				return false;
@@ -256,7 +320,7 @@ public class Busqueda {
 				return false;
 			if(e.accionRepetida("derecha",2))
 				return false;		
-			if(e.ultimaAccion("izquierda"))
+			if(e.ultimaMovimiento("izquierda"))
 				return false;
 			if(e.hayComida())
 				return false;
@@ -267,7 +331,7 @@ public class Busqueda {
 				return false;
 			if(e.accionRepetida("izquierda",2))
 				return false;			
-			if(e.ultimaAccion("derecha"))
+			if(e.ultimaMovimiento("derecha"))
 				return false;
 			if(e.hayComida())
 				return false;
@@ -279,13 +343,7 @@ public class Busqueda {
 			
 	}
 	
-	/**
-	 * Averigua si el estado es un estado objetivo
-	 * @param e Estado actual en el arbol de busqueda.
-	 */	
-	private static boolean objetivo(Estado e){
-		return e.todoConocido();
-	}
+
 
 	private static LinkedList solucion(Nodo n){
 		System.out.println("COSTO " + n.costo);
@@ -306,26 +364,34 @@ public class Busqueda {
 		String accion;
 		int profundidad;
 		int costo;
+		LinkedList Hijos;
 
 		public Nodo(Estado estado, String accion, Nodo padre) {
 			super();
 			this.padre = padre;
 			this.estado = estado;
 			this.accion = accion;
+			this.Hijos= new LinkedList();
 			this.profundidad = padre.getProfundidad() + 1;
-			this.costo = this.costoAccion(accion, estado) + profundidad;
+			this.costo = padre.getCosto() + this.costoAccion(accion, estado) + profundidad;
 		}
 
-
+		public void addHijos(Nodo h)
+			{
+			if (h!=null)
+				Hijos.add(h);
+			}
+		public List getListHijos()
+		{
+			return Hijos;
+		
+		}
 		private int costoAccion(String accion, Estado e) {
 			if(accion == "comer")
 				return 1;
 			
 			if(accion == "pelear")
-				return 20;
-			
-			if(e.hayComida())
-				return 5;
+				return 10;
 			
 			return 15;
 			
@@ -336,6 +402,7 @@ public class Busqueda {
 			this.padre = null;
 			this.estado = estado;
 			this.accion = "";
+			this.Hijos= new LinkedList();
 			this.profundidad = 0;
 		}
 
@@ -371,6 +438,14 @@ public class Busqueda {
 				
 			return -1;
 			
+		}
+
+		public int getCosto() {
+			return costo;
+		}
+
+		public void setCosto(int costo) {
+			this.costo = costo;
 		}
 	}
 

@@ -1,5 +1,6 @@
 package agente;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 import calculador.Calculador;
@@ -16,10 +17,43 @@ public class Simulador {
 		Vector comida   = this.calculador.inicializarComida();
 		Pair posicion = this.calculador.getPosicionInicial();
 
+		boolean encontrado;
+		for(int j=4; j >0 ;j--){
+			for(int i=1;i<5;i++){
+	
+				encontrado = false;
+				Pair p = new Pair(i,j);
+				Iterator t = comida.iterator();		
+				while (t.hasNext()) {
+					Pair p2 = (Pair) t.next();
+					if (p2.x() == p.x() && p2.y() == p.y()) {
+						encontrado = true;
+						System.out.print(" 1");			
+					}
+				}		
+				
+				t = enemigos.iterator();		
+				while (t.hasNext()) {
+					Pair p2 = (Pair) t.next();
+					if (p2.x() == p.x() && p2.y() == p.y()) {
+						encontrado = true;
+						System.out.print(" 2");				
+					}
+				}
+				if(p.equal(posicion)){
+					encontrado = true;
+					System.out.print(" P");
+				}
+				if(!encontrado)
+					System.out.print(" 0");
+			}
+			System.out.println();
+		}
+		
 		this.agente = new Agente();
 		// Adivinamos inicialmente que 50 es la energia con la que empieza
 		//int energia  = 50;
-		int energia = this.calculador.calcularEnergiaPacMan("");
+		int energia = this.calculador.calcularEnergiaPacMan();
 		int ciclo = 0;
 		while (ciclo < MAX_CICLOS) {
 			System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
