@@ -6,21 +6,24 @@ import java.util.*;
 import calculador.Pair;
 
 public class Estado {
-
+	private Percepcion ultimaPercepcion;
 	private int energiaActual;
 	private int energiaAnterior;
 	private MundoPercibido mundoPercibido;
 	private ExperienciaEnergetica experienciaEnergetica;
 	private Pair2 posicionActual;
 	private LinkedList secuenciaAccionPos;
+	private String recorrido;
 	
 	public Estado() {
 		mundoPercibido = new MundoPercibido();
 		experienciaEnergetica = new ExperienciaEnergetica();
 		secuenciaAccionPos = new LinkedList();
+		recorrido = "";
 	}
 
 	public void actualizar(Percepcion p) {
+		ultimaPercepcion = p;
 		posicionActual = new Pair2(p.getPosicionActual());
 		energiaAnterior = energiaActual;
 		energiaActual = p.getEnergia();
@@ -37,7 +40,7 @@ public class Estado {
 		if(mundoPercibido.getCeldaAt(x - 1, y) == -1)
 			mundoPercibido.actualizarCelda(x - 1,y,p.getIzq());
 
-		System.out.println(mundoPercibido.toString(posicionActual));
+		
 	}
 	
 	/**
@@ -87,6 +90,18 @@ public class Estado {
 	}
 	
 	public boolean todoComidaConsumida() {
+		for(int i = 1; i < 5; i++){
+			for(int j = 1; j < 5; j++){
+				if(mundoPercibido.getCeldaAt(i, j) == -1 ||
+				   mundoPercibido.getCeldaAt(i, j) == 1 
+				)
+					return false;
+			}
+		}
+		return true;	
+	}
+	
+	public boolean todoComidaConsumidaEnemigosMuertos() {
 		for(int i = 1; i < 5; i++){
 			for(int j = 1; j < 5; j++){
 				if(mundoPercibido.getCeldaAt(i, j) == -1 ||
@@ -229,16 +244,20 @@ public class Estado {
 	}
 
 	/**
-	 * Se fija si la ultima accion llevada a
-	 * cabo es una dada
+	 * Se fija si la ultima movimiento llevado a
+	 * cabo es accion (arriba, abajo, derecha, izquierda).
 	 * @param accion es accion la ultima accion?.
 	 */
-	public boolean ultimaAccion(String accion){
+	public boolean ultimaMovimiento(String accion){
 		if(secuenciaAccionPos.isEmpty())
 			return false;
 		
 		LinkedList l = (LinkedList) secuenciaAccionPos.getLast();
 		String a = (String) l.get(1); 
+		if(a.equals("pelear")  || a.equals("comer")){
+			l = (LinkedList) secuenciaAccionPos.getLast();
+			a = (String) l.get(1); 
+		}
 		if(a.equals(accion))
 			return true;
 		return false;
@@ -313,6 +332,18 @@ public class Estado {
 		e.posicionActual = new Pair2(this.posicionActual);
 		e.secuenciaAccionPos = (LinkedList)secuenciaAccionPos.clone();
 		return e;
+	}
+
+	public Object getRecorrido() {
+		// TODO Auto-generated method stub
+		return recorrido;
+	}
+
+	public void actualizarRecorrido(String accion) {
+		this.recorrido += "\n"  
+					   + " " + ultimaPercepcion.toString() + "\n" 
+		               + "energia: " + energiaActual  + "\n" + mundoPercibido.toString(posicionActual) + accion;
+		
 	}
 	
 
