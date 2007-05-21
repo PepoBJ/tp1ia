@@ -69,13 +69,13 @@ public class MundoPercibido {
 	public String toString(Pair2 p){
 		String result = "";
 		String c;
-		for(int i =4; i>0; i--){
-			for(int j=1;j<5; j++){
-				c = new Integer(getCeldaAt(j, i)).toString();
-				if(p.x() == j && p.y() == i){
+		for(int i = 1; i < 5; i++){
+			for(int j= 1; j < 5; j++){
+				c = new Integer(getCeldaAt(i, j)).toString();
+				if(p.x() == i && p.y() == j){
 					c = " P";
-				}else if(getCeldaAt(j, i) != -1)
-					c = " " + new Integer(getCeldaAt(j, i)).toString();
+				}else if(getCeldaAt(i, j) != -1)
+					c = " " + new Integer(getCeldaAt(i, j)).toString();
 				result += c + " ";
 			}
 			result+="\n";

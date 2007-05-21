@@ -22,12 +22,15 @@ public class Percepcion {
 		this.energia = energia;
 		
 		
-		this.izq = this.process(posicionActual.x()-1, posicionActual.y(), comida, enemigos);
+		/*this.izq = this.process(posicionActual.x()-1, posicionActual.y(), comida, enemigos);
 		this.der = this.process(posicionActual.x()+1, posicionActual.y(), comida, enemigos);
 		this.abajo = this.process(posicionActual.x(), posicionActual.y()-1, comida, enemigos);
-		this.arriba = this.process(posicionActual.x(), posicionActual.y()+1, comida, enemigos);
-		//this.arriba = this.process(posicionActual.x(), posicionActual.y()-1, comida, enemigos);
-		//this.abajo = this.process(posicionActual.x(), posicionActual.y()+1, comida, enemigos);
+		this.arriba = this.process(posicionActual.x(), posicionActual.y()+1, comida, enemigos);*/
+		
+		this.izq = this.process(posicionActual.x(), posicionActual.y() - 1, comida, enemigos);
+		this.der = this.process(posicionActual.x(), posicionActual.y() + 1, comida, enemigos);
+		this.arriba = this.process(posicionActual.x() - 1, posicionActual.y(), comida, enemigos);
+		this.abajo = this.process(posicionActual.x() + 1, posicionActual.y(), comida, enemigos);
 	}
 
 	public int process(int x, int y, Vector comida, Vector enemigos) {

@@ -1,7 +1,7 @@
 package agente;
 
-import java.util.*;
-
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import calculador.Pair;
 
@@ -31,14 +31,14 @@ public class Estado {
 		int x = posicionActual.x();
 		int y = posicionActual.y();
 		
-		if(mundoPercibido.getCeldaAt(x, y - 1) == -1)
-			mundoPercibido.actualizarCelda(x,y - 1,p.getAbajo());
-		if(mundoPercibido.getCeldaAt(x, y + 1) == -1)
-			mundoPercibido.actualizarCelda(x,y + 1,p.getArriba());
 		if(mundoPercibido.getCeldaAt(x + 1, y) == -1)
-			mundoPercibido.actualizarCelda(x + 1,y,p.getDer());
+			mundoPercibido.actualizarCelda(x + 1,y,p.getAbajo());
 		if(mundoPercibido.getCeldaAt(x - 1, y) == -1)
-			mundoPercibido.actualizarCelda(x - 1,y,p.getIzq());
+			mundoPercibido.actualizarCelda(x - 1,y,p.getArriba());
+		if(mundoPercibido.getCeldaAt(x, y + 1) == -1)
+			mundoPercibido.actualizarCelda(x,y + 1,p.getDer());
+		if(mundoPercibido.getCeldaAt(x, y - 1) == -1)
+			mundoPercibido.actualizarCelda(x,y - 1,p.getIzq());
 
 		
 	}
@@ -51,7 +51,7 @@ public class Estado {
 
 	public void agregarAccionPos(String accion) {
 		LinkedList accionPos = new LinkedList();
-		accionPos.add( new Pair(this.posicionActual.x(),this.posicionActual.y()) );
+		accionPos.add( new Pair2(this.posicionActual.x(),this.posicionActual.y()) );
 		accionPos.add( accion );
 		
 		secuenciaAccionPos.add(accionPos);		
@@ -119,24 +119,24 @@ public class Estado {
 	 * en 0 a efectos de la simulacion
 	 */
 	private void posicionesAdyacentes(){
-		int arribaY = posicionActual.y() + 1;
-		int arribaX = posicionActual.x();
+		int arribaY = posicionActual.y();
+		int arribaX = posicionActual.x() - 1;
 		int arribaValor = mundoPercibido.getCeldaAt(arribaX, arribaY);
 		if(arribaValor == -1) arribaValor = 0;
 		
-		int abajoY = posicionActual.y() - 1;
-		int abajoX = posicionActual.x();
+		int abajoY = posicionActual.y();
+		int abajoX = posicionActual.x() + 1;
 		int abajoValor = mundoPercibido.getCeldaAt(abajoX, abajoY);
 		if(abajoValor == -1) abajoValor = 0;		
 		
-		int derechaX = posicionActual.x() + 1;
-		int derechaY = posicionActual.y();
+		int derechaX = posicionActual.x();
+		int derechaY = posicionActual.y() + 1;
 		int derechaValor = mundoPercibido.getCeldaAt(derechaX, derechaY);
 		if(derechaValor == -1) derechaValor = 0;		
 	
 		
-		int izquierdaX = posicionActual.x() - 1;
-		int izquierdaY = posicionActual.y();
+		int izquierdaX = posicionActual.x();
+		int izquierdaY = posicionActual.y() - 1;
 		int izquierdaValor = mundoPercibido.getCeldaAt(izquierdaX, izquierdaY);
 		if(izquierdaValor == -1) izquierdaValor = 0;		
 		
@@ -150,41 +150,42 @@ public class Estado {
 	 * Los Stes metodos solo son utilizados para la simulacion
 	 */
 
-	public void arriba() {
-		int temp = posicionActual.y() + 1;
+
+	public void abajo() {
+		int temp = posicionActual.x() + 1;
 		if (temp == 5) {temp = 1;}
 				
-		agregarAccionPos("arriba");		
-		posicionActual.setY(temp);		
+		agregarAccionPos("abajo");		
+		posicionActual.setX(temp);		
 		posicionesAdyacentes();
 	}
 
-	public void abajo() {
-		int temp = posicionActual.y() - 1;
+	public void arriba() {
+		int temp = posicionActual.x() - 1;
 		if(temp == 0) temp = 4;
 				
-		agregarAccionPos("abajo");
+		agregarAccionPos("arriba");
+		posicionActual.setX(temp);
+		posicionesAdyacentes();
+	}
+	
+	public void derecha() {
+		int temp = posicionActual.y() + 1;
+		if(temp == 5) temp = 1;
+		
+		agregarAccionPos("derecha");
 		posicionActual.setY(temp);
 		posicionesAdyacentes();
 	}
 
-	public void derecha() {
-		int temp = posicionActual.x() + 1;
-		if(temp == 5) temp = 1;
-		
-		agregarAccionPos("derecha");
-		posicionActual.setX(temp);
-		posicionesAdyacentes();
-	}
-
 	public void izquierda() {
-		int temp = posicionActual.x() - 1;
+		int temp = posicionActual.y() - 1;
 		if(temp == 0) temp = 4;
 		
 		agregarAccionPos("izquierda");
-		posicionActual.setX(temp);
+		posicionActual.setY(temp);
 		posicionesAdyacentes();
-	}
+	}	
 
 	public void comer() {
 		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
@@ -213,7 +214,7 @@ public class Estado {
 		Iterator i = secuenciaAccionPos.iterator();
 		while(i.hasNext()){
 			LinkedList l = (LinkedList)i.next();
-			Pair p = (Pair)l.get(0);
+			Pair2 p = (Pair2)l.get(0);
 			String a = (String)l.get(1);
 			if(p.x() == posicionActual.x() && 
 			   p.y() == posicionActual.y() && 
@@ -249,17 +250,21 @@ public class Estado {
 	 * @param accion es accion la ultima accion?.
 	 */
 	public boolean ultimaMovimiento(String accion){
-		if(secuenciaAccionPos.isEmpty())
-			return false;
 		
-		LinkedList l = (LinkedList) secuenciaAccionPos.getLast();
-		String a = (String) l.get(1); 
-		if(a.equals("pelear")  || a.equals("comer")){
-			l = (LinkedList) secuenciaAccionPos.getLast();
-			a = (String) l.get(1); 
+		for(int i = secuenciaAccionPos.size()-1; i >=0; i--){
+			LinkedList l = (LinkedList) secuenciaAccionPos.get(i);
+			String a = (String) l.get(1);
+
+			if(a.equals("pelear")  || a.equals("comer")){
+				continue; 
+			}
+			
+			if(a.equals(accion))
+				return true;
+			else
+				return false;
 		}
-		if(a.equals(accion))
-			return true;
+		
 		return false;
 	}
 
@@ -342,7 +347,9 @@ public class Estado {
 	public void actualizarRecorrido(String accion) {
 		this.recorrido += "\n"  
 					   + " " + ultimaPercepcion.toString() + "\n" 
-		               + "energia: " + energiaActual  + "\n" + mundoPercibido.toString(posicionActual) + accion;
+		               + "energia: " + energiaActual  + "\n" 
+		               + "posicion: " + posicionActual.x()  + posicionActual.y() + "\n"         
+		               + mundoPercibido.toString(posicionActual) + accion;
 		
 	}
 	

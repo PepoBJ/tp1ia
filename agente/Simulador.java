@@ -7,6 +7,7 @@ import calculador.Calculador;
 import calculador.Pair;
 
 public class Simulador {
+	public int performance;
 	private Calculador calculador;
 	private Agente agente;
 	static int MAX_CICLOS = 80;
@@ -16,13 +17,13 @@ public class Simulador {
 		Vector enemigos = this.calculador.inicializarEnemigo();
 		Vector comida   = this.calculador.inicializarComida();
 		Pair posicion = this.calculador.getPosicionInicial();
-
+		/*System.out.println(posicion.x() + " " + posicion.y());
 		boolean encontrado;
-		for(int j=4; j >0 ;j--){
-			for(int i=1;i<5;i++){
+		for(int j=1; j < 5 ;j++){
+			for(int i=1;i < 5;i++){
 	
 				encontrado = false;
-				Pair p = new Pair(i,j);
+				Pair p = new Pair(j,i);
 				Iterator t = comida.iterator();		
 				while (t.hasNext()) {
 					Pair p2 = (Pair) t.next();
@@ -48,7 +49,7 @@ public class Simulador {
 					System.out.print(" 0");
 			}
 			System.out.println();
-		}
+		}*/
 		
 		this.agente = new Agente();
 		// Adivinamos inicialmente que 50 es la energia con la que empieza
@@ -56,22 +57,24 @@ public class Simulador {
 		int energia = this.calculador.calcularEnergiaPacMan();
 		int ciclo = 0;
 		while (ciclo < MAX_CICLOS) {
-			System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
+			//System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
 			
 			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
-			System.out.println(ciclo+") "+percepcion);
+			//System.out.println(ciclo+") "+percepcion);
 			
 			String accion = this.agente.accion(percepcion);
 			
-			System.out.println(" accion:"+accion);
+			//System.out.println(" accion:"+accion);
 			if (accion == "terminar") {
-				System.out.print(" performance: "+this.calculador.getPerformance());
+				this.performance=this.calculador.getPerformance();
+				//System.out.print(" performance: "+this.performance);
 				break;
 			}
 			energia = this.calculador.calcularEnergiaPacMan(accion);
 			posicion = this.calcularNuevaPosicion(posicion, accion);
 			ciclo++;
 		}
+		
 	}
 
 	 
@@ -81,24 +84,24 @@ public class Simulador {
 		int y = posicion.y();
 		
 		if (accion == "arriba") {
-			y += 1;
-			if (y>4) {				
-				y = 1;
+			x -= 1;
+			if (x<1) {				
+				x = 4;
 			}
 		} else if (accion == "abajo") {
-			y -= 1;
-			if (y<1) {				
-				y=4;
+			x += 1;
+			if (x > 4) {				
+				x=1;
 			}
 		} else if (accion == "izquierda" ) {
-			x -= 1;
-			if (x<1) {
-				x=4;
+			y -= 1;
+			if (y<1) {
+				y=4;
 			}
 		} else if (accion == "derecha") {
-			x += 1;
-			if (x>4){
-				x=1;
+			y += 1;
+			if (y>4){
+				y=1;
 			}
 		}
 		
@@ -112,7 +115,16 @@ public class Simulador {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Simulador s = new Simulador();
+		String perform="";
+		float performNro=0;
+		for(int i=0; i<100;i++){
+			Simulador s = new Simulador();
+			perform += "\n" + s.performance;
+			performNro+=s.performance;
+		}
+		System.out.println(perform);
+		
+		System.out.print(performNro/100);
 	}
 
 }
