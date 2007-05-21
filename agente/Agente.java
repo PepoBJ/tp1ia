@@ -47,6 +47,18 @@ public class Agente {
 		if(accion == "pelear"){
 			estado.pelearAccion();
 		}
+		if(accion == "arriba"){
+			estado.arribaAccion();
+		}
+		if(accion == "abajo"){
+			estado.abajoAccion();
+		}
+		if(accion == "derecha"){
+			estado.derechaAccion();
+		}
+		if(accion == "izquierda"){
+			estado.izquierdaAccion();
+		}
 	}
 
 

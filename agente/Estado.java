@@ -159,6 +159,10 @@ public class Estado {
 		posicionActual.setX(temp);		
 		posicionesAdyacentes();
 	}
+	
+	public void abajoAccion() {	
+		agregarAccionPos("abajo");		
+	}
 
 	public void arriba() {
 		int temp = posicionActual.x() - 1;
@@ -168,6 +172,10 @@ public class Estado {
 		posicionActual.setX(temp);
 		posicionesAdyacentes();
 	}
+
+	public void arribaAccion() {
+		agregarAccionPos("arriba");
+	}	
 	
 	public void derecha() {
 		int temp = posicionActual.y() + 1;
@@ -178,6 +186,11 @@ public class Estado {
 		posicionesAdyacentes();
 	}
 
+	public void derechaAccion() {
+		agregarAccionPos("derecha");
+	}
+
+	
 	public void izquierda() {
 		int temp = posicionActual.y() - 1;
 		if(temp == 0) temp = 4;
@@ -185,24 +198,32 @@ public class Estado {
 		agregarAccionPos("izquierda");
 		posicionActual.setY(temp);
 		posicionesAdyacentes();
+	}
+	
+	public void izquierdaAccion() {
+		agregarAccionPos("izquierda");
 	}	
 
 	public void comer() {
 		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
 		this.energiaActual += 10;
+		agregarAccionPos("comer");
 	}
 	
 	public void comerAccion() {
 		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
+		agregarAccionPos("comer");
 	}
 
 	public void pelear() {
 		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
 		this.energiaActual -= 10;
+		agregarAccionPos("pelear");
 	}
 
 	public void pelearAccion() {
 		mundoPercibido.actualizarCelda(posicionActual.x(), posicionActual.y(), 0);
+		agregarAccionPos("pelear");
 	}
 	
 	/**
@@ -266,6 +287,19 @@ public class Estado {
 		}
 		
 		return false;
+	}
+	
+	public int cantidadEjecuciones(String accion){
+		int cant = 0;
+		for(int i = secuenciaAccionPos.size()-1; i >=0; i--){
+			LinkedList l = (LinkedList) secuenciaAccionPos.get(i);
+			String a = (String) l.get(1);
+			
+			if(a.equals(accion))
+				cant ++;
+		}
+		
+		return cant;
 	}
 
 	/**
