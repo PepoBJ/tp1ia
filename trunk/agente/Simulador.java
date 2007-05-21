@@ -17,7 +17,38 @@ public class Simulador {
 		Vector enemigos = this.calculador.inicializarEnemigo();
 		Vector comida   = this.calculador.inicializarComida();
 		Pair posicion = this.calculador.getPosicionInicial();
-		/*System.out.println(posicion.x() + " " + posicion.y());
+		
+		//this.imprimir_ambiente(enemigos, comida, posicion);
+		
+		this.agente = new Agente();
+		int energia = this.calculador.calcularEnergiaPacMan();
+		int ciclo = 0;
+		while (ciclo < MAX_CICLOS) {
+			
+			
+			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
+			String accion = this.agente.accion(percepcion);
+			
+			//System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
+			//System.out.println(ciclo+") "+percepcion);
+			//System.out.println(" accion:"+accion);
+			
+			if (accion == "terminar") {
+				this.performance=this.calculador.getPerformance();
+				System.out.print(" performance: "+this.performance);
+				break;
+			}
+			energia = this.calculador.calcularEnergiaPacMan(accion);
+			posicion = this.calcularNuevaPosicion(posicion, accion);
+			ciclo++;
+		}
+		
+	}
+
+	 
+	
+	private void imprimir_ambiente(Vector enemigos, Vector comida, Pair posicion) {
+		// System.out.println(posicion.x() + " " + posicion.y());
 		boolean encontrado;
 		for(int j=1; j < 5 ;j++){
 			for(int i=1;i < 5;i++){
@@ -49,36 +80,11 @@ public class Simulador {
 					System.out.print(" 0");
 			}
 			System.out.println();
-		}*/
-		
-		this.agente = new Agente();
-		// Adivinamos inicialmente que 50 es la energia con la que empieza
-		//int energia  = 50;
-		int energia = this.calculador.calcularEnergiaPacMan();
-		int ciclo = 0;
-		while (ciclo < MAX_CICLOS) {
-			//System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
-			
-			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
-			System.out.println(ciclo+") "+percepcion);
-			
-			String accion = this.agente.accion(percepcion);
-			
-			//System.out.println(" accion:"+accion);
-			if (accion == "terminar") {
-				this.performance=this.calculador.getPerformance();
-				System.out.print(" performance: "+this.performance);
-				break;
-			}
-			energia = this.calculador.calcularEnergiaPacMan(accion);
-			posicion = this.calcularNuevaPosicion(posicion, accion);
-			ciclo++;
 		}
-		
 	}
 
-	 
-	
+
+
 	private Pair calcularNuevaPosicion(Pair posicion, String accion) {
 		int x = posicion.x();
 		int y = posicion.y();
@@ -117,14 +123,14 @@ public class Simulador {
 	public static void main(String[] args) {
 		/*String perform="";
 		float performNro=0;
-		for(int i=0; i<100;i++){
+		for(int i=0; i<200;i++){
 			Simulador s = new Simulador();
 			perform += "\n" + s.performance;
 			performNro+=s.performance;
 		}
 		System.out.println(perform);
 		
-		System.out.print(performNro/100);*/
+		System.out.print(performNro/200);*/
 		Simulador s = new Simulador();
 	}
 

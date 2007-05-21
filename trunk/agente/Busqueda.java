@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Stack;
 
 public class Busqueda {
@@ -183,6 +182,8 @@ public class Busqueda {
 		nodosExpandirColaPrioridad = new PriorityQueue();
 		Nodo nodoInicial = new Nodo(e);
 		nodosExpandirColaPrioridad.add(nodoInicial);
+		
+		PriorityQueue pq = nodosExpandirColaPrioridad;
 
 		Nodo ste;
 		Estado temp;
@@ -192,7 +193,6 @@ public class Busqueda {
 
 			if(objetivo(ste.getEstado())){
 				imprimirArbol(nodoInicial,1,ste);
-				//System.out.print("Objetivo encontrado");
 				return solucion(ste);
 			}
 
@@ -260,8 +260,8 @@ public class Busqueda {
 		Iterator i = hijos.iterator();
 		for(int x=0;x<tab;x++)
 			System.out.print("-*-");
-		System.out.print(n.getAccion());
-		if (n == f) System.out.println("  NODO FINAL");
+		System.out.print(n.getAccion() + " " + n.costo);
+		if (n == f) System.out.print("  NODO FINAL");
 		System.out.println();
 		while(i.hasNext()){
 			n = (Nodo)i.next();
@@ -287,9 +287,6 @@ public class Busqueda {
 			if (!e.hayEnemigo()) {
 				return false;
 			}
-			/*if(e.getEnergiaActual() < 5){
-				return false;
-			}*/
 		}
 
 		if(a == "arriba"){
@@ -389,12 +386,19 @@ public class Busqueda {
 		}
 		private int costoAccion(String accion, Estado e) {
 			if(accion == "comer")
-				return -15;
+				return 1;
 
-			if(accion == "pelear")
-				return -5;
+			if(accion == "pelear" && e.getEnergiaActual() > 5)
+				return 2;
+			if(accion == "pelear" && e.getEnergiaActual() <= 5)
+				return 500;
 
-			return 2;
+			if(padre.getAccion() == "comer" )
+				return 1;
+			if(padre.getAccion() == "pelear" )
+				return 2;
+			
+			return 20000;
 
 		}
 		public int getProfundidad() {
