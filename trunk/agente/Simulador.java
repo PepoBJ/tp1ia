@@ -60,14 +60,14 @@ public class Simulador {
 			//System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
 			
 			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
-			//System.out.println(ciclo+") "+percepcion);
+			System.out.println(ciclo+") "+percepcion);
 			
 			String accion = this.agente.accion(percepcion);
 			
 			//System.out.println(" accion:"+accion);
 			if (accion == "terminar") {
 				this.performance=this.calculador.getPerformance();
-				//System.out.print(" performance: "+this.performance);
+				System.out.print(" performance: "+this.performance);
 				break;
 			}
 			energia = this.calculador.calcularEnergiaPacMan(accion);
@@ -115,7 +115,7 @@ public class Simulador {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String perform="";
+		/*String perform="";
 		float performNro=0;
 		for(int i=0; i<100;i++){
 			Simulador s = new Simulador();
@@ -124,7 +124,8 @@ public class Simulador {
 		}
 		System.out.println(perform);
 		
-		System.out.print(performNro/100);
+		System.out.print(performNro/100);*/
+		Simulador s = new Simulador();
 	}
 
 }

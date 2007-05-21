@@ -191,7 +191,7 @@ public class Busqueda {
 			ste = (Nodo)nodosExpandirColaPrioridad.remove(); 
 
 			if(objetivo(ste.getEstado())){
-				//imprimirArbol(nodoInicial,1,ste);
+				imprimirArbol(nodoInicial,1,ste);
 				//System.out.print("Objetivo encontrado");
 				return solucion(ste);
 			}
