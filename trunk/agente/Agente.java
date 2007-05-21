@@ -31,7 +31,7 @@ public class Agente {
 			return accion;
 		} else {
 			this.estado.actualizarRecorrido("");
-			System.out.print(estado.getRecorrido());
+			//System.out.print(estado.getRecorrido());
 			return "terminar";
 		}
 	}

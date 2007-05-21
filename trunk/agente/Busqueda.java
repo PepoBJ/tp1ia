@@ -12,7 +12,7 @@ public class Busqueda {
 	static LinkedList nodosExpandirCola;
 	static PriorityQueue nodosExpandirColaPrioridad;
 	static String recorrido = "";
-	
+
 	public Busqueda() {
 
 	}
@@ -37,7 +37,7 @@ public class Busqueda {
 			ste = (Nodo)nodosExpandirPila.pop(); 
 			if(objetivo(ste.getEstado())){
 				System.out.println("Objetivo encontrado");
-				
+
 				imprimirArbol(nodoInicial,0, ste);
 				return solucion(ste);
 			}
@@ -80,7 +80,7 @@ public class Busqueda {
 				nodosExpandirPila.push(tempNode=new Nodo(temp,"comer",ste));
 				ste.addHijos(tempNode);
 			}
-			
+
 
 			if(precondicion("pelear", ste)){
 				temp =(Estado) ste.getEstado().clone();
@@ -93,7 +93,7 @@ public class Busqueda {
 
 		return new LinkedList();
 	}
-	
+
 	/**
 	 * Busqueda en amplitud utilizando un COLA (LinkedList).
 	 * Utiliza las precondiciones
@@ -109,29 +109,28 @@ public class Busqueda {
 		Nodo ste;
 		Nodo tempNode;
 		Estado temp;
-		
+
 		while(!nodosExpandirCola.isEmpty()){
-			
+
 			ste = (Nodo)nodosExpandirCola.removeFirst();
 			
-			
+
+
 			if(objetivo(ste.getEstado())){
-				System.out.println("Objetivo encontrado");
-				//System.out.println(recorrido);
-				
-				imprimirArbol(nodoInicial,1,ste);
-				
+				//System.out.println("Objetivo encontrado");
+				//imprimirArbol(nodoInicial,1,ste);
+
 				return solucion(ste);
 			}
-			
+
 			if(precondicion("comer", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.comer();
 				nodosExpandirCola.addLast(tempNode=new Nodo(temp,"comer",ste));
 				ste.addHijos(tempNode);
-				
+
 			}
-			
+
 			if(precondicion("pelear", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.pelear();
@@ -171,8 +170,8 @@ public class Busqueda {
 
 		return new LinkedList();
 	}
-	
-		
+
+
 	/**
 	 * Busqueda en costo uniforme se utiliza una
 	 * COLA DE PRIORIDAD. Utiliza las precondiciones
@@ -193,7 +192,7 @@ public class Busqueda {
 
 			if(objetivo(ste.getEstado())){
 				//imprimirArbol(nodoInicial,1,ste);
-				System.out.print("Objetivo encontrado");
+				//System.out.print("Objetivo encontrado");
 				return solucion(ste);
 			}
 
@@ -202,9 +201,9 @@ public class Busqueda {
 				temp.comer();
 				nodosExpandirColaPrioridad.add(tempNode=new Nodo(temp,"comer",ste));
 				ste.addHijos(tempNode);
-				
+
 			}
-			
+
 			if(precondicion("pelear", ste)){
 				temp =(Estado) ste.getEstado().clone();
 				temp.pelear();
@@ -244,15 +243,15 @@ public class Busqueda {
 
 		return new LinkedList();
 	}	
-	
+
 	/**
 	 * Averigua si el estado es un estado objetivo
 	 * @param e Estado actual en el arbol de busqueda.
 	 */	
 	private static boolean objetivo(Estado e){
-		return e.todoComidaConsumida();
+		return e.todoComidaConsumidaEnemigosMuertos();
 	}
-	
+
 	/*Imprime una representacion en String
 	 * del proceso de busqueda
 	 * */
@@ -268,9 +267,9 @@ public class Busqueda {
 			n = (Nodo)i.next();
 			imprimirArbol(n,tab + 1, f);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Averigua si se cumplen las precondiciones para una
 	 * determinada accion
@@ -292,61 +291,52 @@ public class Busqueda {
 				return false;
 			}*/
 		}
-			
+
 		if(a == "arriba"){
 			if(e.accionPosRepetida("arriba"))
 				return false;			
-			if(e.accionRepetida("arriba",2))
+			if(e.accionRepetida("arriba",1))
 				return false;
 			if(e.ultimaMovimiento("abajo"))
 				return false;
-			if(e.hayComida())
-				return false;
 		}
-			
+
 		if(a == "abajo"){
 			if(e.accionPosRepetida("abajo"))
 				return false;
-			if(e.accionRepetida("abajo",2))
+			if(e.accionRepetida("abajo",1))
 				return false;
 			if(e.ultimaMovimiento("arriba"))
 				return false;
-			if(e.hayComida())
-				return false;
 		}
-			
+
 		if(a == "derecha"){
 			if(e.accionPosRepetida("derecha"))
 				return false;
-			if(e.accionRepetida("derecha",2))
+			if(e.accionRepetida("derecha",1))
 				return false;		
 			if(e.ultimaMovimiento("izquierda"))
-				return false;
-			if(e.hayComida())
 				return false;
 		}
 
 		if(a == "izquierda"){
 			if(e.accionPosRepetida("izquierda"))
 				return false;
-			if(e.accionRepetida("izquierda",2))
+			if(e.accionRepetida("izquierda",1))
 				return false;			
 			if(e.ultimaMovimiento("derecha"))
 				return false;
-			if(e.hayComida())
-				return false;
-			
 		}
-		
+
 		return true;
-			
-			
+
+
 	}
-	
+
 
 
 	private static LinkedList solucion(Nodo n){
-		System.out.println("COSTO " + n.costo);
+		//System.out.println("COSTO " + n.costo);
 		LinkedList s = new LinkedList();
 
 		while(! n.accion.equals("")){
@@ -373,28 +363,7 @@ public class Busqueda {
 			this.accion = accion;
 			this.Hijos= new LinkedList();
 			this.profundidad = padre.getProfundidad() + 1;
-			this.costo = padre.getCosto() + this.costoAccion(accion, estado) + profundidad;
-		}
-
-		public void addHijos(Nodo h)
-			{
-			if (h!=null)
-				Hijos.add(h);
-			}
-		public List getListHijos()
-		{
-			return Hijos;
-		
-		}
-		private int costoAccion(String accion, Estado e) {
-			if(accion == "comer")
-				return 1;
-			
-			if(accion == "pelear")
-				return 10;
-			
-			return 15;
-			
+			this.costo = padre.getCosto() + this.costoAccion(accion, estado);
 		}
 
 		public Nodo(Estado estado) {
@@ -404,8 +373,30 @@ public class Busqueda {
 			this.accion = "";
 			this.Hijos= new LinkedList();
 			this.profundidad = 0;
+			this.costo = 0;
+
 		}
 
+		public void addHijos(Nodo h)
+		{
+			if (h!=null)
+				Hijos.add(h);
+		}
+		public List getListHijos()
+		{
+			return Hijos;
+
+		}
+		private int costoAccion(String accion, Estado e) {
+			if(accion == "comer")
+				return -15;
+
+			if(accion == "pelear")
+				return -5;
+
+			return 2;
+
+		}
 		public int getProfundidad() {
 			return profundidad;
 		}		
@@ -428,16 +419,16 @@ public class Busqueda {
 		public void setPadre(Nodo padre) {
 			this.padre = padre;
 		}
-		
+
 		public int compareTo(Object n){
 			if(this.costo == ((Nodo)n).costo)
 				return 0;
-			
+
 			if(this.costo > ((Nodo)n).costo)
 				return 1;
-				
+
 			return -1;
-			
+
 		}
 
 		public int getCosto() {
