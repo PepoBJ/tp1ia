@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=""/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="calculador.jar"/>
-	<classpathentry kind="output" path=""/>
+	<classpathentry path="" kind="src"/>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
+	<classpathentry path="calculador.jar" kind="lib"/>
+	<classpathentry path="jpl.jar" kind="lib"/>
+	<classpathentry path="" kind="output"/>
 </classpath>

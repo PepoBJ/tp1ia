@@ -15,7 +15,14 @@ public class Percepcion {
 	private int der;
 	private int abajo;
 	private int arriba;
-
+	public Percepcion(int izq, int der, int arriba, int abajo, int energia){
+		this.izq = izq;
+		this.der =der;
+		this.arriba = arriba;
+		this.abajo = abajo;
+		this.energia = energia;
+		
+	}
 	public Percepcion(Pair posicionActual, int energia, Vector comida, Vector enemigos) {
 		super();
 		this.posicionActual = posicionActual;

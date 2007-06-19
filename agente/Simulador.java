@@ -9,7 +9,7 @@ import calculador.Pair;
 public class Simulador {
 	public int performance;
 	private Calculador calculador;
-	private Agente agente;
+	private AgenteProlog agente;
 	static int MAX_CICLOS = 80;
 	public Simulador() {
 		this.calculador = new Calculador();
@@ -18,22 +18,26 @@ public class Simulador {
 		Vector comida   = this.calculador.inicializarComida();
 		Pair posicion = this.calculador.getPosicionInicial();
 		
-		//this.imprimir_ambiente(enemigos, comida, posicion);
+		this.imprimir_ambiente(enemigos, comida, posicion);
 		
-		this.agente = new Agente();
-		int energia = this.calculador.calcularEnergiaPacMan();
+		int energia = this.calculador.calcularEnergiaPacMan();		
+		
+		Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
+		
+		this.agente = new AgenteProlog(percepcion);
+		
 		int ciclo = 0;
 		while (ciclo < MAX_CICLOS) {
 			
 			
-			Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
+			percepcion = new Percepcion(posicion,energia,comida,enemigos);
 			String accion = this.agente.accion(percepcion);
 			
 			//System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
 			//System.out.println(ciclo+") "+percepcion);
 			//System.out.println(" accion:"+accion);
 			
-			if (accion == "terminar") {
+			if (accion.equals("terminar")){
 				this.performance=this.calculador.getPerformance();
 				System.out.print(" performance: "+this.performance);
 				break;
