@@ -386,6 +386,26 @@ public class Estado {
 		               + mundoPercibido.toString(posicionActual) + accion;
 		
 	}
+
+	/*Este metodo sirve para que no vuelva a aparecer comida o enemigos
+	 * si ya acabamos de comer o pelear
+	 * */
+	public Percepcion arreglarPercepcion() {	
+		int x = posicionActual.x();
+		int y = posicionActual.y();
+		
+		int izq = mundoPercibido.getCeldaAt(x, y - 1);
+		int der = mundoPercibido.getCeldaAt(x, y + 1);
+		int arriba = mundoPercibido.getCeldaAt(x - 1, y);
+		int abajo = mundoPercibido.getCeldaAt(x + 1, y);
+		
+		Percepcion result = new Percepcion(izq, der, arriba, abajo, energiaActual);
+		return result;
+	}
+
+	public void imprimirMundo() {
+		System.out.println(mundoPercibido.toString(posicionActual));
+	}
 	
 
 
