@@ -13,37 +13,58 @@ public class Simulador {
 	static int MAX_CICLOS = 80;
 	public Simulador() {
 		this.calculador = new Calculador();
-
+	
 		Vector enemigos = this.calculador.inicializarEnemigo();
 		Vector comida   = this.calculador.inicializarComida();
 		Pair posicion = this.calculador.getPosicionInicial();
-		
+			
 		this.imprimir_ambiente(enemigos, comida, posicion);
 		
+		System.out.println("POSICION INICIAL: "+posicion.x()+","+posicion.y()+" ");
+		
+		Iterator i = enemigos.iterator();
+		while(i.hasNext()){
+			Pair p = (Pair)i.next();
+			System.out.print(p.x()+","+p.y()+" ");
+		}
+		System.out.println("");
+		i = comida.iterator();
+		while(i.hasNext()){
+			Pair p = (Pair)i.next();
+			System.out.print(p.x()+","+p.y()+" ");
+		}
+		System.out.println("");
+		
 		int energia = this.calculador.calcularEnergiaPacMan();		
-		
+				
 		Percepcion percepcion = new Percepcion(posicion,energia,comida,enemigos);
-		
+				
 		this.agente = new AgenteProlog(percepcion);
-		
+				
 		int ciclo = 0;
 		while (ciclo < MAX_CICLOS) {
 			
 			
 			percepcion = new Percepcion(posicion,energia,comida,enemigos);
-			String accion = this.agente.accion(percepcion);
 			
+			String accion = agente.accion(percepcion);
+
+			System.out.println("accion desde el CALCULADOR:"+accion+" energia: "+energia);			
+			
+		
 			//System.out.println(" energia:"+energia+" posicion:"+posicion.x()+","+posicion.y());
 			//System.out.println(ciclo+") "+percepcion);
-			//System.out.println(" accion:"+accion);
-			
+
+		
 			if (accion.equals("terminar")){
 				this.performance=this.calculador.getPerformance();
 				System.out.print(" performance: "+this.performance);
+				
 				break;
 			}
 			energia = this.calculador.calcularEnergiaPacMan(accion);
 			posicion = this.calcularNuevaPosicion(posicion, accion);
+		
 			ciclo++;
 		}
 		

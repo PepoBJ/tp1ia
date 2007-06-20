@@ -1,4 +1,4 @@
-agente(2,2,cero).
+agente(3,2,cero).
 %agente(X, Y, S): El objeto agente, eSta en la celda X, Y en la Situacion S
 %Vivo(S): indica que el agente eSta vivo.
 %visitado(X,Y, S): indica que la celda X, Y fue viSitada
@@ -12,15 +12,15 @@ agente(2,2,cero).
 
 energia(E,S) :- percepcion([_,_,_,_,E], S).
 
-alimento(X,Y,S) :- percepcion([_,_,_,2,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
-alimento(X,Y,S) :- percepcion([_,_,2,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
-alimento(X,Y,S) :- percepcion([_,2,_,_,_], S), agente(I, J, S), derecha(X,Y,I,J), !.
-alimento(X,Y,S) :- percepcion([2,_,_,_,_], S), agente(I, J, S), izquierda(X,Y,I,J), !.
+alimento(X,Y,S) :- percepcion([_,_,_,1,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
+alimento(X,Y,S) :- percepcion([_,_,1,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
+alimento(X,Y,S) :- percepcion([_,1,_,_,_], S), agente(I, J, S), derecha(X,Y,I,J), !.
+alimento(X,Y,S) :- percepcion([1,_,_,_,_], S), agente(I, J, S), izquierda(X,Y,I,J), !.
 
-enemigo(X,Y,S) :- percepcion([_,_,_,1,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
-enemigo(X,Y,S) :- percepcion([_,_,1,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
-enemigo(X,Y,S) :- percepcion([_,1,_,_,_], S), agente(I, J, S), derecha(X,Y,I,J), !.
-enemigo(X,Y,S) :- percepcion([1,_,_,_,_], S), agente(I, J, S), izquierda(X,Y,I,J), !.
+enemigo(X,Y,S) :- percepcion([_,_,_,2,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
+enemigo(X,Y,S) :- percepcion([_,_,2,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
+enemigo(X,Y,S) :- percepcion([_,2,_,_,_], S), agente(I, J, S), derecha(X,Y,I,J), !.
+enemigo(X,Y,S) :- percepcion([2,_,_,_,_], S), agente(I, J, S), izquierda(X,Y,I,J), !.
 
 nada(X,Y,S) :- percepcion([_,_,_,0,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
 nada(X,Y,S) :- percepcion([_,_,0,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
@@ -45,7 +45,7 @@ previo(1,4).
 %Valor DE LAS ACCIONES
 
 %%EXCELENTE COMER Y PELEAR
-excelente(pelear,S) :- agente(X,Y,S), enemigo(X,Y,S), !.
+excelente(pelear,S) :- agente(X,Y,S), enemigo(X,Y,S), energia(E, S), E > 5, !.
 excelente(comer,S) :- agente(X,Y,S), alimento(X,Y,S).
 
 %MUY BUENO IR A DONDE HAY COMIDA Y ENEMIGOS
@@ -97,11 +97,10 @@ nada(X,Y,res(_,S)) :- nada(X,Y,S), !.
 alimento(X,Y,res(A,S)) :- alimento(X,Y,S), not(A=comer), !.
 enemigo(X,Y,res(A,S)) :- enemigo(X,Y,S), not(A=pelear), !.
 
+visitado(X,Y,res(_A,S)) :- agente(X,Y,S), !.
+visitado(X,Y,res(_A,S)) :- visitado(X,Y,S).
 
-
-visitado(X,Y,res(_A,S)) :- agente(X,Y,S).
-
-siguiente_accion(terminar,S) :- todo_visitado(S), !.
+siguiente_accion(terminar,S) :- objetivo(S), !.
 siguiente_accion(A,S) :- excelente(A,S), !.
 siguiente_accion(A,S) :- muyBueno(A,S), !.
 siguiente_accion(A,S) :- bueno(A,S), !.
@@ -109,7 +108,7 @@ siguiente_accion(A,S) :- malo(A,S), !.
 
 %Definici�n de meta
 
-todo_visitado(S) :- nada(1,1,S), nada(2,1,S), nada(3,1,S), nada(4,1,S), nada(1,2,S), nada(2,2,S), nada(3,2,S), nada(4,2,S), nada(1,3,S), nada(2,3,S), nada(3,3,S), nada(4,3,S), nada(1,4,S), nada(2,4,S), nada(3,4,S), nada(4,4,S).
+objetivo(S) :- nada(1,1,S), nada(2,1,S), nada(3,1,S), nada(4,1,S), nada(1,2,S), nada(2,2,S), nada(3,2,S), nada(4,2,S), nada(1,3,S), nada(2,3,S), nada(3,3,S), nada(4,3,S), nada(1,4,S), nada(2,4,S), nada(3,4,S), nada(4,4,S).
 
 
 
@@ -125,23 +124,24 @@ todo_visitado(S) :- nada(1,1,S), nada(2,1,S), nada(3,1,S), nada(4,1,S), nada(1,2
 %percepcion([0, 0, 0, 0, 20], res(irDerecha, res(pelear, res(irIzquierda, res(pelear, res(irArriba, res(comer, res(irIzquierda, 0))))))) ). %situacion 7
 %percepcion([0, 0, 2, 0, 20], res(irDerecha, res(irDerecha, res(pelear, res(irIzquierda, res(pelear, res(irArriba, res(comer, res(irIzquierda, 0)))))))) ). %situacion 8
 
-percepcion([0,2,1,1,48],cero).
-percepcion([0,2,1,0,44],res(irDerecha,cero)).
-percepcion([0,2,1,0,44],res(comer,res(irDerecha,cero))).
-percepcion([0,0,0,1,40],res(irDerecha,res(comer,res(irDerecha,cero)))).
-percepcion([0,0,0,1,40],res(comer,res(irDerecha,res(comer,res(irDerecha,cero))))).
-percepcion([0,0,0,0,36],res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero)))))).
-percepcion([0,0,0,0,36],res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero))))))).
-percepcion([0,1,0,0,33],res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero)))))))).
-percepcion([0,0,0,2,30],res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero))))))))).
-percepcion([0,0,0,2,30],res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero)))))))))).
-percepcion([0,2,0,1,27],res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero))))))))))).
-percepcion([0,2,0,1,27],res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero)))))))))))).
-percepcion([0,0,0,1,25],res(irDerecha,res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero))))))))))))).
-percepcion([0,0,0,1,25],res(comer,res(irDerecha,res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero)))))))))))))).
-percepcion([1,0,0,0,23],res(irAbajo,res(comer,res(irDerecha,res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero))))))))))))))).
-percepcion([1,0,0,0,23],res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero)))))))))))))))).
-percepcion([1,0,0,0,21],res(irIzquierda,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero))))))))))))))))).
-percepcion([1,0,0,0,21],res(pelear,res(irIzquierda,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero)))))))))))))))))).
-percepcion([0,0,0,0,19],res(irIzquierda,res(pelear,res(irIzquierda,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero))))))))))))))))))).
-percepcion([0,0,0,0,19],res(pelear,res(irIzquierda,res(pelear,res(irIzquierda,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irAbajo,res(pelear,res(irDerecha,res(irDerecha,res(pelear,res(irAbajo,res(comer,res(irDerecha,res(comer,res(irDerecha,cero)))))))))))))))))))).
+percepcion([0,0,1,0,35],cero).
+percepcion([0,2,1,0,32],res(irArriba,cero)).
+percepcion([0,2,1,0,43],res(comer,res(irArriba,cero))).
+percepcion([1,2,0,0,39],res(irArriba,res(comer,res(irArriba,cero)))).
+percepcion([1,2,0,0,50],res(comer,res(irArriba,res(comer,res(irArriba,cero))))).
+percepcion([1,0,0,0,45],res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero)))))).
+percepcion([1,0,0,0,56],res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero))))))).
+percepcion([2,0,0,0,51],res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero)))))))).
+percepcion([2,0,0,0,62],res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero))))))))).
+percepcion([0,0,1,2,56],res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero)))))))))).
+percepcion([0,0,1,2,44],res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero))))))))))).
+percepcion([0,0,0,0,40],res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero)))))))))))).
+percepcion([0,0,0,0,51],res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero))))))))))))).
+percepcion([0,0,1,0,46],res(irDerecha,res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero)))))))))))))).
+percepcion([0,0,0,0,42],res(irArriba,res(irDerecha,res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero))))))))))))))).
+percepcion([0,0,0,0,53],res(comer,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero)))))))))))))))).
+percepcion([0,0,0,0,48],res(irDerecha,res(comer,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero))))))))))))))))).
+percepcion([0,0,0,0,44],res(irArriba,res(irDerecha,res(comer,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero)))))))))))))))))).
+percepcion([2,0,0,0,40],res(irIzquierda,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero))))))))))))))))))).
+percepcion([0,0,0,0,36],res(irIzquierda,res(irIzquierda,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero)))))))))))))))))))).
+percepcion([0,0,0,0,28],res(pelear,res(irIzquierda,res(irIzquierda,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(irDerecha,res(comer,res(irArriba,res(pelear,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irIzquierda,res(comer,res(irArriba,res(comer,res(irArriba,cero))))))))))))))))))))).
