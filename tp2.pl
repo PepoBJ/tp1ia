@@ -11,15 +11,15 @@
 
 energia(E,S) :- percepcion([_,_,_,_,E], S).
 
-alimento(X,Y,S) :- percepcion([_,_,_,2,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
-alimento(X,Y,S) :- percepcion([_,_,2,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
-alimento(X,Y,S) :- percepcion([_,2,_,_,_], S), agente(I, J, S), derecha(X,Y,I,J), !.
-alimento(X,Y,S) :- percepcion([2,_,_,_,_], S), agente(I, J, S), izquierda(X,Y,I,J), !.
+alimento(X,Y,S) :- percepcion([_,_,_,1,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
+alimento(X,Y,S) :- percepcion([_,_,1,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
+alimento(X,Y,S) :- percepcion([_,1,_,_,_], S), agente(I, J, S), derecha(X,Y,I,J), !.
+alimento(X,Y,S) :- percepcion([1,_,_,_,_], S), agente(I, J, S), izquierda(X,Y,I,J), !.
 
-enemigo(X,Y,S) :- percepcion([_,_,_,1,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
-enemigo(X,Y,S) :- percepcion([_,_,1,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
-enemigo(X,Y,S) :- percepcion([_,1,_,_,_], S), agente(I, J, S), derecha(X,Y,I,J), !.
-enemigo(X,Y,S) :- percepcion([1,_,_,_,_], S), agente(I, J, S), izquierda(X,Y,I,J), !.
+enemigo(X,Y,S) :- percepcion([_,_,_,2,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
+enemigo(X,Y,S) :- percepcion([_,_,2,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
+enemigo(X,Y,S) :- percepcion([_,2,_,_,_], S), agente(I, J, S), derecha(X,Y,I,J), !.
+enemigo(X,Y,S) :- percepcion([2,_,_,_,_], S), agente(I, J, S), izquierda(X,Y,I,J), !.
 
 nada(X,Y,S) :- percepcion([_,_,_,0,_], S), agente(I, J, S), abajo(X,Y,I,J), !.
 nada(X,Y,S) :- percepcion([_,_,0,_,_], S), agente(I, J, S), arriba(X,Y,I,J), !.
@@ -44,7 +44,7 @@ previo(1,4).
 %Valor DE LAS ACCIONES
 
 %%EXCELENTE COMER Y PELEAR
-excelente(pelear,S) :- agente(X,Y,S), enemigo(X,Y,S), !.
+excelente(pelear,S) :- agente(X,Y,S), enemigo(X,Y,S), energia(E, S), E > 5, !.
 excelente(comer,S) :- agente(X,Y,S), alimento(X,Y,S).
 
 %MUY BUENO IR A DONDE HAY COMIDA Y ENEMIGOS
@@ -96,11 +96,10 @@ nada(X,Y,res(_,S)) :- nada(X,Y,S), !.
 alimento(X,Y,res(A,S)) :- alimento(X,Y,S), not(A=comer), !.
 enemigo(X,Y,res(A,S)) :- enemigo(X,Y,S), not(A=pelear), !.
 
+visitado(X,Y,res(_A,S)) :- agente(X,Y,S), !.
+visitado(X,Y,res(_A,S)) :- visitado(X,Y,S).
 
-
-visitado(X,Y,res(_A,S)) :- agente(X,Y,S).
-
-siguiente_accion(terminar,S) :- todo_visitado(S), !.
+siguiente_accion(terminar,S) :- objetivo(S), !.
 siguiente_accion(A,S) :- excelente(A,S), !.
 siguiente_accion(A,S) :- muyBueno(A,S), !.
 siguiente_accion(A,S) :- bueno(A,S), !.
@@ -108,7 +107,7 @@ siguiente_accion(A,S) :- malo(A,S), !.
 
 %Definici�n de meta
 
-todo_visitado(S) :- nada(1,1,S), nada(2,1,S), nada(3,1,S), nada(4,1,S), nada(1,2,S), nada(2,2,S), nada(3,2,S), nada(4,2,S), nada(1,3,S), nada(2,3,S), nada(3,3,S), nada(4,3,S), nada(1,4,S), nada(2,4,S), nada(3,4,S), nada(4,4,S).
+objetivo(S) :- nada(1,1,S), nada(2,1,S), nada(3,1,S), nada(4,1,S), nada(1,2,S), nada(2,2,S), nada(3,2,S), nada(4,2,S), nada(1,3,S), nada(2,3,S), nada(3,3,S), nada(4,3,S), nada(1,4,S), nada(2,4,S), nada(3,4,S), nada(4,4,S).
 
 
 

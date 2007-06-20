@@ -89,6 +89,7 @@ public class AgenteProlog{
 		this._actualizarPercepcionProlog(percepcionString);
 		
 		String accion = this.elegirMejorAccion();
+		
 		System.out.println(accion);
 		
 		acciones.add(accion);
@@ -102,6 +103,10 @@ public class AgenteProlog{
 	    	accion = "izquierda";
   	    if(accion.equals("irDerecha"))
    	    	accion = "derecha"; 
+  	    if(accion.equals("comer"))
+  	    	accion = "comer";
+  	    if(accion.equals("pelear"))
+  	    	accion = "pelear";
   	    
 		this.actualizarEstado2(accion);
 		
